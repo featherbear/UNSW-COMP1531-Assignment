@@ -1,5 +1,5 @@
 from flask import Flask
-app = Flask(__name__, template_folder = '../site/templates', static_folder = '../site/static')
+app = Flask(__name__, template_folder = '../site/templates', static_folder = '../site/assets', static_url_path='/assets')
 
 import routes
 for module in routes.__modules: app.register_blueprint(routes.__modules[module].site)

@@ -1,0 +1,95 @@
+{% extends "_site.html" %} {% set title = "Check your order" %} {% block head %}
+<!-- this is in the head -->
+{% endblock %} {% block content %}
+<!-- this in the content -->
+<style>
+  .triangle {
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 50px 50px 0 50px;
+    border-color: #548fff transparent transparent transparent;
+  }
+
+  section[name="form"] {
+    background-color: #548fff;
+    text-align: center;
+  }
+  section[name="form"] form input[type="text"] {
+    border: 0;
+    border-bottom: 1px solid #3498db;
+    outline: none;
+    /* width: 100%; */
+    text-align: center;
+    /* font-size: 26px; */
+    background-color: transparent;
+  }
+  section[name="status"] {
+    background-color: #a5d0ff;
+  }
+</style>
+
+<section name="form">
+  <form>
+    <label>My order number is: #</label
+    ><input name="orderID" type="text" placeholder="Enter your order id..." />
+    <input type="submit" value="Check" />
+  </form>
+</section>
+
+<section name="status">
+  <div class="triangle"></div>
+  <!-- 
+  Order: #<span name="orderID"></span>
+  Price: $<span name="total"></span>
+  Order Time: <span name="time"></span> 
+  
+  Your Order
+  [                  ]
+  [                  ]
+  [                  ]
+           Total: $<span name="total"></span>
+  -->
+</section>
+
+<script>
+  const checkOrder = function(orderID) {
+    GourmetBurgers.getOrder(orderID).then(orderData => {
+      document.querySelector("span[name=orderID]").innerText = orderData.id;
+      
+      /*   
+         orderData.id
+         orderData.time
+         orderData.total
+         orderData.items = [
+                              {
+                                 .id: id
+                                 .quantity: qty
+                                 .price: price
+                                 
+                                 .ing = {
+                                           .id: qty
+                                        } 
+                              },
+                              
+                              ...
+                           ]
+      */
+    });
+  };
+
+  document.querySelector("form").addEventListener("submit", evt => {
+    evt.preventDefault();
+    let orderID = evt.target.orderID.value.trim();
+    location.hash = orderID;
+    checkOrder(orderID);
+  });
+
+  window.addEventListener("hashchange", evt => {
+    let orderID = location.hash.substr(1).trim();
+    document.querySelector("form").orderID.value = orderID;
+    checkOrder(orderID);
+  });
+</script>
+{% endblock %}

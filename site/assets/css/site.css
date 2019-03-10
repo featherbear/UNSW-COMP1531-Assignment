@@ -1,0 +1,91 @@
+html,
+body {
+  margin: 0;
+  /* padding: 0; */
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1200px;
+  /* width: 100%; */
+  flex: 1;
+  background-color: rgba(255, 125, 255, 0.6);
+}
+
+header,
+footer {
+  background-color: black;
+}
+
+footer {
+  text-align: right;
+}
+
+header .logo {
+
+  margin: 0 auto;
+  text-align: center;
+  max-width: 100px;
+}
+/* header .logo::before {
+  content: " ";
+  _background-image: url("./BURGAAAAA_animated.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  height: 80px;
+  width: 200px;
+} */
+
+header .menu {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+header .menu a {
+  flex: 1;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+header .menu a:hover {
+  cursor: pointer;
+  background-color: #a7a7a7;
+}
+
+header .menu a.active {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+#loading {
+  transition: all 2s;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: #d3f2ff;
+  z-index: 10;
+  text-align: center;
+}
+
+#loading img {
+  max-width: 1000px;
+}
+#loading:not(.active) {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#content {
+  width: 100%;
+}
