@@ -3,8 +3,7 @@ import sqlite3
 
 def create_connection(db_file):
     try:
-        conn = sqlite3.connect(db_file, check_same_thread = False)
-        return conn
+        return sqlite3.connect(db_file, check_same_thread = False)
     except sqlite3.Error as e:
         print(e)
     return None
@@ -48,5 +47,7 @@ def update(*args, commit = True, **kwargs):
     if commit: conn.commit()
     return c.rowcount
 
+def init():
+  global conn
+  conn = create_connection("database.sqlite3")
 
-conn = create_connection("database.sqlite3")

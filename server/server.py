@@ -5,9 +5,11 @@ import routes
 for module in routes.__modules: app.register_blueprint(routes.__modules[module].site)
 
 from lib import database
-from lib.tableQueries import SQL
+database.init()
 
-for value in SQL.values():
+from data.sql_table_definitions import data as sql_table_definitions
+
+for value in sql_table_definitions.values():
     database.create_table(value)
 
 app.run("0.0.0.0", 1313, debug=False)
