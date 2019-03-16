@@ -10,13 +10,13 @@ data = dict(
   CREATE TABLE IF NOT EXISTS link_orders (
     orderID INTEGER NOT NULL,
     is_custom BOOLEAN NOT NULL CHECK (is_custom IN (0,1)),
-    itemID INTEGER CHECK ((is_custom = 1) or (is_custom = 0 and not itemID = '')),
     customID INTEGER CHECK ((is_custom = 0) or (is_custom = 1 and not customID = '')),
+    menuID INTEGER CHECK ((is_custom = 1) or (is_custom = 0 and not menuID = '')),
     price INTEGER NOT NULL,
     
     FOREIGN KEY (orderID) REFERENCES orders (orderID),
-    FOREIGN KEY (itemID) REFERENCES inventory (inventoryID),
-    FOREIGN KEY (customID) REFERENCES custom_mains (customID)
+    FOREIGN KEY (customID) REFERENCES custom_mains (customID),
+    FOREIGN KEY (menuID) REFERENCES menu (menuID)
   );""", 
 
   custom_mains = """
@@ -89,6 +89,5 @@ data = dict(
     stock_max INTEGER NOT NULL,
     
     FOREIGN KEY (quantity_type) REFERENCES inventory (inventoryID)
-  
   );"""  
 )
