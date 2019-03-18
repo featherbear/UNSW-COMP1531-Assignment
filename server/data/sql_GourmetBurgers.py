@@ -3,10 +3,10 @@ from lib import database
 
 class ORDERS:
     # Get orders in the queue
-    STAFF_GET_ORDERS = "SELECT orderID, date FROM orders WHERE status = 0"
+    STAFF_GET_ORDERS = "SELECT orderID FROM orders WHERE status = 0"
 
     # Get all orders
-    STAFF_GET_ALL_ORDERS = "SELECT orderID, date, status FROM orders"
+    STAFF_GET_ALL_ORDERS = "SELECT orderID FROM orders"
 
     # Get basic order information (and price)
     # GET_ORDER = "SELECT * FROM orders WHERE orderCode = ?"
@@ -53,21 +53,30 @@ class MENU:
     ENABLE_ITEM = "UPDATE menu SET is_available = 0 WHERE menuID = ?"
 
     GET_MENU = "SELECT menuID, name, price, can_customise, is_available FROM menu"
+    GET_MENU_ID = "SELECT menuID FROM menu"
     GET_MENU_ITEM = "SELECT name, price, can_customise, is_available FROM menu WHERE menuID = ?"
 
     # Get menuID of a custom meal
     RESOLVE_CUSTOM_TO_MENU = "SELECT menuID, name, price FROM menu, custom_mains WHERE customID = ? AND mainID = menuID"
 
     GET_CUSTOM_COMPONENTS = "SELECT inventoryID, quantity FROM link_custom_mains WHERE customID = ?"
-    GET_MAIN_COMPONENTS = "SELECT inventoryID, quantity, max FROM default_mains WHERE menuID = ?"
+    GET_MAIN_COMPONENTS = "SELECT inventoryID, quantity, max FROM link_menu WHERE menuID = ?"
 
+    GET_CUSTOM_COMPONENTS_FROM_ID = "SELECT inventoryID, quantity FROM link_custom_mains WHERE customID = ?"
+    GET_MAIN_COMPONENTS_FROM_ID = "SELECT inventoryID, quantity, max FROM link_menu WHERE menuID = ?"
+
+    GET_MAIN_COMPONENT = "SELECT inventoryID, quantity, max FROM link_menu WHERE menuID = ?"
 
 class INVENTORY:
     # GET_INVENTORY = "SELECT * FROM inventory"
     GET_INVENTORY = "SELECT inventoryID, name, suffix, price, quantity, stock_max FROM inventory, quantity_types WHERE inventory.quantity_type = quantity_types.quantityID"
-    GET_INVENTORY_ITEM = "SELECT name, suffix, price, quantity, stock_max FROM inventory WHERE inventoryID = ?"
+    GET_INVENTORY_IDS = "SELECT inventoryID FROM inventory"
+
+    GET_INVENTORY_ITEM = "SELECT name, suffix, price, quantity, stock_max FROM inventory, quantity_types WHERE inventory.quantity_type = quantity_types.quantityID AND inventory.inventoryID = ?"
     DECREMENT_INVENTORY = "UPDATE inventory SET quantity = quantity - ? WHERE inventoryID = ?"
     SET_INVENTORY = "UPDATE inventory SET quantity = ? WHERE inventoryID = ?"
+    
+    
     # GET_FOOD_ITEMS = "SELECT * FROM inventory INNER JOIN categories ON inventory.category = categories.categoryID "
     # GET_ITEMS_OF_CATEGORY = "SELECT  FROM category WHERE category = ?"
     # GET_ITEMS_OF_CATEGORY_LEVEL = "SELECT * FROM inventory WHERE category = ?"
