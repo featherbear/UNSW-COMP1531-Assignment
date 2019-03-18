@@ -57,7 +57,7 @@ let GourmetBurgers;
   };
   self = GourmetBurgers;
 
-  fetch("/menu/json")
+  fetch("/data/menu.json")
     .then(resp => resp.json())
     .then(json => {
       if (!json.status) throw false;
