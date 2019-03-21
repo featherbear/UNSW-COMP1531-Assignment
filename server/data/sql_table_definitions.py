@@ -10,15 +10,19 @@ data = dict(
   CREATE TABLE IF NOT EXISTS link_orders (
     orderID INTEGER NOT NULL,
     is_custom BOOLEAN NOT NULL CHECK (is_custom IN (0,1)),
-    customID INTEGER CHECK ((is_custom = 0) or (is_custom = 1 and not customID = '')),
-    menuID INTEGER CHECK ((is_custom = 1) or (is_custom = 0 and not menuID = '')),
+    customID INTEGER,
+    menuID INTEGER,
     price INTEGER NOT NULL,
     
     FOREIGN KEY (orderID) REFERENCES orders (orderID),
     FOREIGN KEY (customID) REFERENCES custom_mains (customID),
     FOREIGN KEY (menuID) REFERENCES menu (menuID)
   );""", 
+  # customID INTEGER CHECK ((is_custom = 0) or (is_custom = 1 and not customID = '')),
+  # menuID INTEGER CHECK ((is_custom = 1) or (is_custom = 0 and not menuID = '')),
 
+
+  # We have this table rather than just linking from `link_orders` to conform to PK FK pairing
   custom_mains = """
   CREATE TABLE IF NOT EXISTS custom_mains (
     customID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -65,11 +69,11 @@ data = dict(
 
   link_categories = """
   CREATE TABLE IF NOT EXISTS link_categories (
-    inventoryID INTEGER NOT NULL,
+    menuID INTEGER NOT NULL,
     categoryID INTEGER NOT NULL,
     level INTEGER NOT NULL,
     
-    FOREIGN KEY (inventoryID) REFERENCES inventory (inventoryID),
+    FOREIGN KEY (menuID) REFERENCES menu (menuID),
     FOREIGN KEY (categoryID) REFERENCES categories (categoryID)
   );""", 
 

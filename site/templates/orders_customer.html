@@ -57,37 +57,23 @@
   const checkOrder = function(orderID) {
     GourmetBurgers.getOrder(orderID).then(orderData => {
       document.querySelector("span[name=orderID]").innerText = orderData.id;
-      
-      /*   
-         orderData.id
-         orderData.time
-         orderData.total
-         orderData.items = [
-                              {
-                                 .id: id
-                                 .quantity: qty
-                                 .price: price
-                                 
-                                 .ing = {
-                                           .id: qty
-                                        } 
-                              },
-                              
-                              ...
-                           ]
-      */
     });
   };
 
   document.querySelector("form").addEventListener("submit", evt => {
     evt.preventDefault();
     let orderID = evt.target.orderID.value.trim();
+    
+    location.hash = "";
     location.hash = orderID;
-    checkOrder(orderID);
+    // checkOrder performed by `hashchange` event
+    // checkOrder(orderID);
   });
 
   window.addEventListener("hashchange", evt => {
-    let orderID = location.hash.substr(1).trim();
+    let orderID = evt.newURL.split("#", 2)[1].trim();
+    if (!orderID) return;
+
     document.querySelector("form").orderID.value = orderID;
     checkOrder(orderID);
   });
