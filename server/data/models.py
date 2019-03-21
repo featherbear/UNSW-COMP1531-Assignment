@@ -49,7 +49,7 @@ class InventoryStock():
             suffix=self._suffix,
             price=self._price,
             quantity=self._quantity,
-            
+
         )
 
         if self._quantity_max is not None:
@@ -59,7 +59,7 @@ class InventoryStock():
 
 
 class MenuComponent(InventoryStock):
-    def __init__(self, inventoryID, quantity, quantity_max = None):
+    def __init__(self, inventoryID, quantity, quantity_max=None):
         super().__init__(inventoryID)
         self._quantity = quantity
         self._quantity_max = quantity_max
@@ -78,7 +78,7 @@ class MenuItem():
             self._price = price
 
         query = database.fetchAll(SQL.MENU.GET_CATEGORIES, (menuID,))
-        
+
         self._categories = {}
         for categoryRecord in query:
             categoryID, level = categoryRecord
@@ -112,14 +112,11 @@ class MenuItem():
 
     @property
     def is_available(self):
-        return "TODO: IMPLEMENT ME"
-
-        if not self._is_available:
-            return False
-
         # Check all the components, if there are not enough items in the stock for all of the components, return False
-        for component in self._components:
-            if somethingBad:
+        componentUsage = self.getComponentUsage()
+        for componentID in componentUsage:
+            print(f"{InventoryStock(componentID).quantity} < {componentUsage[componentID]}")
+            if InventoryStock(componentID).quantity < componentUsage[componentID]:
                 return False
         return True
 
@@ -130,6 +127,14 @@ class MenuItem():
     @property
     def components(self):
         return self._components
+
+    def getComponentUsage(self):
+        usage = {}
+        for component in self._components:
+            if component.id not in usage:
+                usage[component.id] = 0
+            usage[component.id] += component.quantity
+        return usage
 
     def disable(self):
         database.update(SQL.MENU.DISABLE_ITEM, (self._id,))
@@ -153,9 +158,8 @@ class MenuItem():
             price=self._price,
             can_customise=not not self._can_customise,
             is_available=self.is_available,
-            #is_available=not not self._is_available,
-            components=components,
-            categories=self._categories
+            categories=self._categories,
+            components=components
         )
 
     def toHistoricalDict(self):
@@ -174,12 +178,13 @@ class MenuItem():
 
 class CustomMenuItem(MenuItem):
     def __init__(self, customID, price=None):
-        menuID = database.fetchOne(SQL.MENU.RESOLVE_CUSTOM_TO_MENU, (customID,))
+        menuID = database.fetchOne(
+            SQL.MENU.RESOLVE_CUSTOM_TO_MENU, (customID,))
         if not menuID:
             raise NoItemError(f"No custom menu item with id: {customID}")
 
         super().__init__(menuID[0], price, custom=True)
-        
+
         if price:
             self._price = price
 
