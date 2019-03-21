@@ -7,17 +7,25 @@ site = Blueprint(__name__, __name__)
 
 @site.route('/data/inventory.json')
 def getInventoryJSON():
-   data = {}
-   for item in methods.getInventory():
-      data[item.id] = item.toDict()
+    data = {}
+    for item in methods.getInventory():
+        data[item.id] = item.toDict()
 
-   return util.createJSON(True, dict(data=data))
+    return util.createJSON(True, dict(data=data))
+
 
 @site.route('/data/menu.json')
 def getMenuJSON():
-   data = {}
-   for item in methods.getMenu():
-      data[item.id] = item.toMenuDict()
+    menu = {}
+    for item in methods.getMenu():
+        menu[item.id] = item.toMenuDict()
 
-   return util.createJSON(True, dict(data=data))
+    categories = methods.getCategories()
 
+    return util.createJSON(True, dict(menu=menu, categories=categories))
+
+
+@site.route('/data/categories.json')
+def getCategoriesJSON():
+    categories = methods.getCategories()
+    return util.createJSON(True, dict(categories=categories))

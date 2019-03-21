@@ -76,6 +76,17 @@ class MenuItem():
 
         if price:
             self._price = price
+
+        query = database.fetchAll(SQL.MENU.GET_CATEGORIES, (menuID,))
+        
+        self._categories = {}
+        for categoryRecord in query:
+            categoryID, level = categoryRecord
+            if level not in self._categories:
+                self._categories[level] = [categoryID]
+            else:
+                self._categories[level].append(categoryID)
+
         self._components = []
 
         if not custom:
@@ -113,6 +124,10 @@ class MenuItem():
         return True
 
     @property
+    def categories(self):
+        return self._categories
+
+    @property
     def components(self):
         return self._components
 
@@ -139,7 +154,8 @@ class MenuItem():
             can_customise=not not self._can_customise,
             is_available=self.is_available,
             #is_available=not not self._is_available,
-            components=components
+            components=components,
+            categories=self._categories
         )
 
     def toHistoricalDict(self):

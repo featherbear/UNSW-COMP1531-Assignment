@@ -1,6 +1,5 @@
 from lib import database
 
-
 class ORDERS:
     # Get orders in the queue
     STAFF_GET_ORDERS = "SELECT orderID FROM orders WHERE status = 0"
@@ -67,6 +66,11 @@ class MENU:
 
     GET_MAIN_COMPONENT = "SELECT inventoryID, quantity, max FROM link_menu WHERE menuID = ?"
 
+    GET_CATEGORY_DATA = "SELECT categoryID, name from categories"
+    GET_CATEGORY_LINK = "SELECT menuID, categoryID, level FROM link_categories"
+    GET_CATEGORIES = "SELECT categoryID, level FROM link_categories WHERE menuID = ?"
+
+
 class INVENTORY:
     # GET_INVENTORY = "SELECT * FROM inventory"
     GET_INVENTORY = "SELECT inventoryID, name, suffix, price, quantity, stock_max FROM inventory, quantity_types WHERE inventory.quantity_type = quantity_types.quantityID"
@@ -75,7 +79,6 @@ class INVENTORY:
     GET_INVENTORY_ITEM = "SELECT name, suffix, price, quantity, stock_max FROM inventory, quantity_types WHERE inventory.quantity_type = quantity_types.quantityID AND inventory.inventoryID = ?"
     DECREMENT_INVENTORY = "UPDATE inventory SET quantity = quantity - ? WHERE inventoryID = ?"
     SET_INVENTORY = "UPDATE inventory SET quantity = ? WHERE inventoryID = ?"
-    
     
     # GET_FOOD_ITEMS = "SELECT * FROM inventory INNER JOIN categories ON inventory.category = categories.categoryID "
     # GET_ITEMS_OF_CATEGORY = "SELECT  FROM category WHERE category = ?"

@@ -69,11 +69,11 @@ data = dict(
 
   link_categories = """
   CREATE TABLE IF NOT EXISTS link_categories (
-    inventoryID INTEGER NOT NULL,
+    menuID INTEGER NOT NULL,
     categoryID INTEGER NOT NULL,
     level INTEGER NOT NULL,
     
-    FOREIGN KEY (inventoryID) REFERENCES inventory (inventoryID),
+    FOREIGN KEY (menuID) REFERENCES menu (menuID),
     FOREIGN KEY (categoryID) REFERENCES categories (categoryID)
   );""", 
 

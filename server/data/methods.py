@@ -11,6 +11,15 @@ def getMenu():
     for menuItem in database.fetchAll(SQL.MENU.GET_MENU_ID):
         yield models.MenuItem(menuItem[0])
 
+def getCategories():
+    data = {}
+    
+    for categoryRecord in database.fetchAll(SQL.MENU.GET_CATEGORY_DATA):
+        id, name = categoryRecord
+        data[id] = name
+    
+    return data
+
 def getStaffOrders(fetchAll=False):
 
     if fetchAll:
@@ -20,6 +29,7 @@ def getStaffOrders(fetchAll=False):
 
     for order in query:
         yield models.Order(order[0])
+
 
 # def determineCustomDifference(customID):
 #     deltas = {}
