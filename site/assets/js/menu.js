@@ -21,7 +21,6 @@ function ready() {
 
     let elem = document.createElement("div");
     elem.classList.add("menu-item");
-    // elem.menuID = menuID;
     elem.innerText = item.name;
 
     let price = document.createElement("span");
@@ -37,8 +36,8 @@ function ready() {
     if (!item.is_available) elem.classList.add("disabled");
 
     let addToCart = document.createElement("div");
-    addToCart.classList.add('add');
-    addToCart.innerText = "Add to cart"
+    addToCart.classList.add("add");
+    addToCart.innerText = "Add to cart";
     elem.appendChild(addToCart);
 
     container.appendChild(elem);
@@ -52,7 +51,7 @@ function ready() {
     menu[elem.menuID].categories[0].indexOf(categoryID) > -1;
 
   // Select category
-  function selectCategory(categoryID) {
+  function selectCategory(categoryID, fromSearch) {
     if (currentCategory != categoryID) {
       menuCategoriesMap[currentCategory].classList.remove("active");
 
@@ -61,6 +60,10 @@ function ready() {
         filter: categoryID ? getFilterFunction(categoryID) : ""
       });
       currentCategory = categoryID;
+
+      if (!fromSearch) {
+        document.querySelector(".search .search-bar").value = "";
+      }
     }
   }
 
@@ -95,6 +98,7 @@ function ready() {
     let elem = document.createElement("li");
     elem.addEventListener("click", () => selectCategory(undefined));
     elem.innerText = "All Items";
+    elem.classList.add('active');
     menuCategoriesMap[undefined] = elem;
     categoryMenu.appendChild(elem);
 
@@ -132,11 +136,10 @@ function ready() {
   // Handle searching
   document.querySelector(".search input").addEventListener("input", function() {
     // TODO: Fuzzy search maybe?
-    selectCategory(undefined);
+    selectCategory(undefined, true);
+    let needle = this.value.toLowerCase();
     iso.arrange({
-      filter: elem =>
-        menu[elem.menuID].name.toLowerCase().indexOf(this.value.toLowerCase()) >
-        -1
+      filter: elem => menu[elem.menuID].name.toLowerCase().indexOf(needle) > -1
     });
   });
 }
