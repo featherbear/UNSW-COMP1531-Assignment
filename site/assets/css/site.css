@@ -23,10 +23,28 @@ footer {
   background-color: black;
 }
 
+
 footer {
   text-align: right;
+  color: white;
 }
 
+footer .greybox {
+  margin: 10px auto;
+  background-color: rgba(0,0,0,0.4);
+}
+footer ul {
+  margin: 0;
+}
+footer ul li {
+  display: inline;
+}
+
+header {
+  /* background-color: black; */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(91, 43, 15 1)), to(rgba(0, 0, 0, 0)));
+
+}
 header .logo {
 
   margin: 0 auto;
