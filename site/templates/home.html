@@ -1,9 +1,24 @@
-{% extends "_site.html" %}
+{% extends "_site.html" %} {% block content %}
+<style>
+  body > .container {
+    text-align: center;
+    color: white;
 
-{% block head %}
-<!-- this is in the head -->
-{% endblock %}
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  body > .container > h1 {
+    mix-blend-mode: overlay;
+    font-size: 3em;
+  }
+  body > .container > span {
+    font-size: 1.5em;
+  }
+</style>
 
-{% block content %}
-<!-- this in the content -->
+<h1 style="margin-top: 15vh;">Welcome to Gourmet Burgers!</h1>
+<span>Click a tab above to get started...</span>
 {% endblock %}
