@@ -29,42 +29,71 @@
 
 /* Menu Grid */
 #menu-grid {
-  /* display:inline-block; */
   display: inline-flex;
   width: 80%;
   flex-wrap: wrap;
 
-  /* justify-content: space-around; */
-
   float: right;
 }
 
-#menu-grid div {
-  /* flex: 1 0 25%; */
-  /* flex: 0 0 25%; */
+.menu-container {
+  width: 25%;
+  display: flex;
 }
 
-.menu-item {
-  min-width: 25%;
-  background-color: rgba(0, 255, 0, 0.4);
-  cursor: pointer;
-  border-radius: 2px;
-}
-
-.menu-item.disabled {
-  background-color: grey;
-  cursor: default;
-
-  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-}
-
+.menu-container:before,
 .menu-item:before {
   content: "";
   float: left;
   padding-top: 100%;
 }
 
+.menu-item {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  flex: 1;
+
+  border-radius: 6px;
+  margin-bottom: 3px;
+  margin-left: 3px;
+
+  /* Fix positioning for Firefox !?!?!? */
+  filter: grayscale(0%);
+}
+
+.menu-item .price {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 .menu-item .price:before {
   content: "$";
+}
+
+.menu-item .add {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  opacity: 0.5;
+  transition: opacity 0.5s;
+}
+
+.menu-item .add:hover {
+  opacity: 1;
+}
+
+.menu-item.disabled {
+  background-color: grey;
+  cursor: default;
+  pointer-events: none;
+
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+.menu-item.disabled .add,
+.menu-item.disabled .customise {
+  display: none;
 }

@@ -15,9 +15,13 @@ function ready() {
   function createMenuElem(menuID) {
     let item = menu[menuID];
 
+    let container = document.createElement("div");
+    container.classList.add("menu-container");
+    container.menuID = menuID;
+
     let elem = document.createElement("div");
     elem.classList.add("menu-item");
-    elem.menuID = menuID;
+    // elem.menuID = menuID;
     elem.innerText = item.name;
 
     let price = document.createElement("span");
@@ -32,7 +36,14 @@ function ready() {
     // Disable item if not available
     if (!item.is_available) elem.classList.add("disabled");
 
-    return elem;
+    let addToCart = document.createElement("div");
+    addToCart.classList.add('add');
+    addToCart.innerText = "Add to cart"
+    elem.appendChild(addToCart);
+
+    container.appendChild(elem);
+
+    return container;
   }
 
   // Return a filter function for Isotope
