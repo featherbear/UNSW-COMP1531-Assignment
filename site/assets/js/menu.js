@@ -6,6 +6,10 @@ function ready() {
 
   let iso;
 
+  let currentCategory = undefined;
+  let menuCategories = [];
+  let menuCategoriesMap = {};
+
   // Element creators
 
   function createMenuElem(menuID) {
@@ -21,31 +25,46 @@ function ready() {
     price.innerText = item.price / 100;
     elem.appendChild(price);
 
+    if (item.can_customise) {
+      // TODO: Add customise
+    }
+
+    // Disable item if not available
+    if (!item.is_available) elem.classList.add("disabled");
+
     return elem;
   }
 
+  // Return a filter function for Isotope
   const getFilterFunction = categoryID => elem =>
     menu[elem.menuID].categories.hasOwnProperty(0) &&
     menu[elem.menuID].categories[0].indexOf(categoryID) > -1;
 
+  // Select category
+  function selectCategory(categoryID) {
+    if (currentCategory != categoryID) {
+      menuCategoriesMap[currentCategory].classList.remove("active");
+
+      menuCategoriesMap[categoryID].classList.add("active");
+      iso.arrange({
+        filter: categoryID ? getFilterFunction(categoryID) : ""
+      });
+      currentCategory = categoryID;
+    }
+  }
+
+  // Create category list element
   function createCategoryElem(categoryID) {
     let elem = document.createElement("li");
     elem.categoryID = categoryID;
     elem.innerText = GourmetBurgers._categories[categoryID];
 
-    let filterFunction = getFilterFunction(categoryID);
-    elem.addEventListener("click", function() {
-      iso.arrange({
-        filter: filterFunction
-      });
-    });
+    elem.addEventListener("click", () => selectCategory(categoryID));
 
     return elem;
   }
 
   //
-
-  menuCategories = [];
 
   Object.values(menu).forEach(menuItem => {
     // Add level 0 categories of the current item to `menuCategories`
@@ -61,17 +80,19 @@ function ready() {
 
   // Populate category list
   {
+    // Add `All Items`
     let elem = document.createElement("li");
-    elem.addEventListener("click", function() {
-      iso.arrange({ filter: () => true });
-    });
+    elem.addEventListener("click", () => selectCategory(undefined));
     elem.innerText = "All Items";
+    menuCategoriesMap[undefined] = elem;
     categoryMenu.appendChild(elem);
 
     // Add other categories
-    menuCategories.forEach(categoryID =>
-      categoryMenu.appendChild(createCategoryElem(categoryID))
-    );
+    menuCategories.forEach(categoryID => {
+      let elem = createCategoryElem(categoryID);
+      menuCategoriesMap[categoryID] = elem;
+      categoryMenu.appendChild(elem);
+    });
   }
 
   // Initialise Isotope
@@ -88,5 +109,23 @@ function ready() {
       priceAsc: true,
       priceDesc: false
     }
+  });
+
+  // Handle sorting
+  document
+    .querySelector(".search select")
+    .addEventListener("change", function() {
+      iso.arrange({ sortBy: this.value });
+    });
+
+  // Handle searching
+  document.querySelector(".search input").addEventListener("input", function() {
+    // TODO: Fuzzy search maybe?
+    selectCategory(undefined);
+    iso.arrange({
+      filter: elem =>
+        menu[elem.menuID].name.toLowerCase().indexOf(this.value.toLowerCase()) >
+        -1
+    });
   });
 }

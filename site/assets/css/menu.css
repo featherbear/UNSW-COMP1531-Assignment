@@ -1,51 +1,70 @@
 /* Search Bar */
 .search {
   width: 100%;
+  text-align: center;
+  display: flex;
 }
-.search-bar {
-  width: 60%;
-  display: inline;
+.search .search-bar {
+  flex: 1;
 }
 
 /* Category List */
 .categories {
-    width: 20%;
-    display:inline-block;
-    background-color: rgba(255,0,0,0.5)
+  width: 20%;
+  display: inline-block;
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.categories ul {
+  list-style: none;
+}
+
+.categories ul li {
+  cursor: pointer;
+}
+
+.categories ul li.active {
+  font-weight: bold;
 }
 
 /* Menu Grid */
 #menu-grid {
-    /* display:inline-block; */
-    display: inline-flex;
-    width: 80%;
-    flex-wrap: wrap;
-    
-    /* justify-content: space-around; */
+  /* display:inline-block; */
+  display: inline-flex;
+  width: 80%;
+  flex-wrap: wrap;
+
+  /* justify-content: space-around; */
 
   float: right;
-  }
-
-  #menu-grid div {
-/* flex: 1 0 25%; */
-    
-
-/* flex: 0 0 25%; */
-    
-  }
-  .menu-item {
-    min-width: 25%;
-    background-color: rgba(0,255,0,0.4);
 }
-  .menu-item:before {
-    content:'';
-    float:left;
-    padding-top:100%;
-  }
 
+#menu-grid div {
+  /* flex: 1 0 25%; */
+  /* flex: 0 0 25%; */
+}
 
+.menu-item {
+  min-width: 25%;
+  background-color: rgba(0, 255, 0, 0.4);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.menu-item.disabled {
+  background-color: grey;
+  cursor: default;
+
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+.menu-item:before {
+  content: "";
+  float: left;
+  padding-top: 100%;
+}
 
 .menu-item .price:before {
-content: "$"
+  content: "$";
 }
-
