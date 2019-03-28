@@ -1,8 +1,18 @@
 let GourmetBurgers;
-(() => {
+(async () => {
+  const fetchGET = async url =>
+    fetch(url)
+      .then(resp => resp.json())
+      .then(res => {
+        if (res.status) return res.data;
+      });
+  
   let self;
   GourmetBurgers = {
-    _menu: undefined /* Promise */,
+    _menu: await fetchGET("/data/menu.json"),
+    _categories: await fetchGET("/data/categories.json"),
+    _inventory: await fetchGET("/data/inventory.json"),
+
     getOrder: async orderID =>
       fetch("/order/json", {
         method: "POST",
@@ -13,7 +23,8 @@ let GourmetBurgers;
         body: JSON.stringify({ orderID: orderID })
       })
         .then(resp => resp.json())
-        .then(json => json.status ? json.data : null),
+        .then(json => (json.status ? json.data : null)),
+
     cart: {
       calulate: () => {
         throw undefined;
@@ -46,7 +57,7 @@ let GourmetBurgers;
         try {
           return JSON.parse(localStorage.getItem("_gbOrder")) || {};
         } catch {
-          return ({});
+          return {};
         }
       })(),
 
@@ -57,11 +68,5 @@ let GourmetBurgers;
   };
   self = GourmetBurgers;
 
-  fetch("/data/menu.json")
-    .then(resp => resp.json())
-    .then(json => {
-      if (!json.status) throw false;
-      GourmetBurgers._menu = json.data;
-    })
-    .catch(e => console.error("Could not fetch menu"));
+  typeof ready === "function" && ready();
 })();

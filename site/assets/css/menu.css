@@ -1,0 +1,109 @@
+/* Search Bar */
+.search {
+  width: 100%;
+  text-align: center;
+  display: flex;
+}
+.search .search-bar {
+  flex: 1;
+}
+
+/* Category List */
+.categories {
+  width: 20%;
+  display: inline-block;
+  background-color: #fdf6f0;
+}
+
+.categories > div {
+  text-align: center;
+  color: black;
+}
+
+.categories ul {
+  margin: 0;
+  border-top: 1px solid grey;
+  list-style: none;
+  padding: 0;
+  background-color: #fdf6f0;
+}
+
+.categories ul li {
+  cursor: pointer;
+  /* transition: font-weight 1s; */
+}
+
+.categories ul li.active {
+  font-weight: bold;
+}
+
+/* Menu Grid */
+#menu-grid {
+  display: inline-flex;
+  width: 80%;
+  flex-wrap: wrap;
+
+  float: right;
+}
+
+.menu-container {
+  width: 25%;
+  display: flex;
+}
+
+.menu-container:before,
+.menu-item:before {
+  content: "";
+  float: left;
+  padding-top: 100%;
+}
+
+.menu-item {
+  cursor: pointer;
+  background-color: #fdf6f0;
+
+  flex: 1;
+
+  border-radius: 6px;
+  margin-bottom: 3px;
+  margin-left: 3px;
+
+  /* Fix positioning for Firefox !?!?!? */
+  filter: grayscale(0%);
+}
+
+.menu-item .price {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.menu-item .price:before {
+  content: "$";
+}
+
+.menu-item .add {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  opacity: 0.5;
+  transition: opacity 0.5s;
+}
+
+.menu-item .add:hover {
+  opacity: 1;
+}
+
+.menu-item.disabled {
+  background-color: grey;
+  cursor: default;
+  pointer-events: none;
+
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+.menu-item.disabled .add,
+.menu-item.disabled .customise {
+  display: none;
+}
