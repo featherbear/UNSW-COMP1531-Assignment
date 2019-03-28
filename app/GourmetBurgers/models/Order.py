@@ -1,12 +1,11 @@
-from lib import database
-from .. import sql_GourmetBurgers as SQL
 from .Exceptions import NoItemError
 from .MenuItem import MenuItem, HistoricalMenuItem
+from ._SQLBase import SQLBase
 
 
-class Order:
+class Order(SQLBase):
     def __init__(self, orderID):
-        query = database.fetchOne(SQL.ORDERS.GET_ORDER_RAW, (orderID,))
+        query = self._db.fetchOne(self._SQL.ORDERS.GET_ORDER_RAW, (orderID,))
         if not query:
             raise NoItemError(f"No order with id: {orderID}")
 
@@ -16,7 +15,7 @@ class Order:
 
         self._items = []
 
-        for foodItem in database.fetchAll(SQL.ORDERS.ORDER_ITEMS_0, (orderID,)):
+        for foodItem in self._db.fetchAll(self._SQL.ORDERS.ORDER_ITEMS_0, (orderID,)):
             is_custom, customID, menuID, price = foodItem
             self._items.append(HistoricalMenuItem(
                 customID if is_custom else menuID, is_custom, price))
