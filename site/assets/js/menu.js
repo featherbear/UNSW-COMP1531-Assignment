@@ -33,7 +33,7 @@ function ready() {
     }
 
     // Disable item if not available
-    if (!item.is_available) elem.classList.add("disabled");
+    if (!item.available) elem.classList.add("disabled");
 
     let addToCart = document.createElement("div");
     addToCart.classList.add("add");

@@ -45,6 +45,7 @@ data = dict(
   CREATE TABLE IF NOT EXISTS menu (
     menuID INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
+    description TEXT,
     price INTEGER NOT NULL,
     can_customise BOOLEAN NOT NULL CHECK (can_customise IN (0,1)),
     is_available BOOLEAN NOT NULL CHECK (is_available IN (0,1))

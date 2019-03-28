@@ -54,9 +54,9 @@ class MENU:
     GET_MENU = "SELECT menuID, name, price, can_customise, is_available FROM menu"
     GET_MENU_ID = "SELECT menuID FROM menu"
     GET_MENU_ITEM_BASE = "SELECT name, price FROM menu WHERE menuID = ?"
-    GET_MENU_ITEM_OPTIONS = "SELECT can_customise, is_available FROM menu WHERE menuID = ?"
+    GET_MENU_ITEM_OPTIONS = "SELECT can_customise, is_available, description FROM menu WHERE menuID = ?"
 
-    GET_MENU_ITEM = "SELECT name, price, can_customise, is_available FROM menu WHERE menuID = ?"
+    GET_MENU_ITEM = "SELECT name, price, can_customise, is_available, description FROM menu WHERE menuID = ?"
 
     # Get menuID of a custom meal
     RESOLVE_CUSTOM_TO_MENU = "SELECT menuID, name, price FROM menu, custom_mains WHERE customID = ? AND mainID = menuID"

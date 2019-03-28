@@ -48,7 +48,7 @@ class MenuItem(MenuItemBase):
     def __init__(self, menuID):
         super().__init__(menuID)
         query = database.fetchOne(SQL.MENU.GET_MENU_ITEM_OPTIONS, (menuID,))
-        self._can_customise, self._is_available = query
+        self._can_customise, self._is_available, self._description = query
 
         for item in database.fetchAll(SQL.MENU.GET_MAIN_COMPONENTS, (menuID,)):
             component = MenuIngredient(*item)
@@ -99,6 +99,10 @@ class MenuItem(MenuItemBase):
         return dict(
             id=self._id,
             name=self._name,
+<<<<<<< HEAD
+=======
+            description = self._description,
+>>>>>>> feature/browse-menu
             price=self._price,
             can_customise=not not self._can_customise,
             available=self.available,
