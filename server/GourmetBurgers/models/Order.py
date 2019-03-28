@@ -1,4 +1,4 @@
-from ...lib import database
+from lib import database
 from .. import sql_GourmetBurgers as SQL
 from .Exceptions import NoItemError
 from .MenuItem import MenuItem, HistoricalMenuItem

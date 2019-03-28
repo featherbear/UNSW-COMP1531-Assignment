@@ -1,7 +1,6 @@
-from data import models
+from GourmetBurgers import models
 from flask import Blueprint, render_template, request
 from lib import util
-from data.models import NoItemError
 
 site = Blueprint(__name__, __name__)
 
@@ -18,7 +17,7 @@ def get_customerOrder():
    try:
       order = models.Order(orderID)
       return util.createJSON(True, dict(data=order.toDict()))
-   except NoItemError as e:
+   except models.NoItemError as e:
       return util.createJSON(False, dict(error=str(e)))
 
 

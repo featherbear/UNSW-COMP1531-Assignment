@@ -1,6 +1,5 @@
-from ..lib import database
+from lib import database
 from . import models, sql_GourmetBurgers as SQL
-
 
 def getInventory():
     for inventoryItem in database.fetchAll(SQL.INVENTORY.GET_INVENTORY_IDS):

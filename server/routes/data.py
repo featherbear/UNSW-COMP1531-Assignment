@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from lib import util
-from data import methods
+from GourmetBurgers import methods
 
 site = Blueprint(__name__, __name__)
 

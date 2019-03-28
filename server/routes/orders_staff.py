@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request
 site = Blueprint(__name__, __name__)
 
 from lib import util
-from data import methods
+from GourmetBurgers import methods
 
 @site.route('/staff/orders/')
 def view_staffOrder():

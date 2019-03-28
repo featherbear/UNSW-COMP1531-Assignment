@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from ...lib import database
+from lib import database
 from .. import sql_GourmetBurgers as SQL
 from .Exceptions import NoItemError
 
