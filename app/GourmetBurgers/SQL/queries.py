@@ -1,5 +1,3 @@
-from lib import database
-
 class ORDERS:
     # Get orders in the queue
     STAFF_GET_ORDERS = "SELECT orderID FROM orders WHERE status = 0"
@@ -20,7 +18,7 @@ class ORDERS:
     ORDER_TOTAL = "SELECT SUM (price) FROM link_orders WHERE orderID = ?"
 
     # Get level 0 items of order
-    ORDER_ITEMS_0 = "SELECT is_custom, customID, menuID, price FROM link_orders WHERE orderID = ?"
+    ORDER_ITEMS_0 = "SELECT is_custom, customID, menuID, quantity, price FROM link_orders WHERE orderID = ?"
 
     # Get level 1 items of order (ie custom items)
     ORDER_ITEMS_1 = "SELECT inventoryID, quantity FROM link_custom_mains WHERE customID = ?"
@@ -31,25 +29,18 @@ class ORDERS:
     # Place an order
     CREATE_ORDER = "INSERT INTO orders (date, status) VALUES (?, 0)"
     CREATE_CUSTOM_MAIN = "INSERT INTO custom_mains (mainID) VALUES (?)"
-    CREATE_LINK_CUSTOM_MAINS = "INSERT INTO link_custom_mains (customID, ingredientID, quantity) VALUES (?, ?, ?)"
-    CREATE_LINK_ORDER__CUSTOM = "INSERT INTO link_orders (orderID, is_custom, customID, price) VALUES (?, 1, ?, ?)"
-    CREATE_LINK_ORDER = "INSERT INTO link_orders (orderID, is_custom, itemID, price) VALUES (?, 0, ?, ?)"
-    """
-    CREATE_ORDER
-    for each item:
-        if custom:
-            CREATE_CUSTOM_MAIN
-            for each ingredient:
-                CREATE_LINK_CUSTOM_ORDERS
-            CREATE_LINK_ORDER__CUSTOM
-        else:
-            CREATE_LINK_ORDER
-    """
+    CREATE_LINK_CUSTOM_MAINS = "INSERT INTO link_custom_mains (customID, inventoryID, quantity) VALUES (?, ?, ?)"
+    CREATE_LINK_ORDER__CUSTOM = "INSERT INTO link_orders (orderID, is_custom, customID, quantity, price) VALUES (?, 1, ?, ?, ?)"
+    CREATE_LINK_ORDER = "INSERT INTO link_orders (orderID, is_custom, menuID, quantity, price) VALUES (?, 0, ?, ?, ?)"
+
 
 
 class MENU:
     DISABLE_ITEM = "UPDATE menu SET is_available = 0 WHERE menuID = ?"
     ENABLE_ITEM = "UPDATE menu SET is_available = 1 WHERE menuID = ?"
+
+    # EXISTS = "SELECT 1 FROM menu WHERE menuID = ?"
+    CAN_CUSTOMISE = "SELECT 1 FROM menu WHERE menuID = ? AND can_customise = 1"
 
     GET_MENU = "SELECT menuID, name, price, can_customise, is_available FROM menu"
     GET_MENU_ID = "SELECT menuID FROM menu"
@@ -70,6 +61,9 @@ class MENU:
 
 
 class INVENTORY:
+
+    # EXISTS = "SELECT 1 FROM inventory WHERE inventoryID = ?"
+
     # GET_INVENTORY = "SELECT * FROM inventory"
     GET_INVENTORY = "SELECT inventoryID, name, suffix, price, quantity, stock_max FROM inventory, quantity_types WHERE inventory.quantity_type = quantity_types.quantityID"
     GET_INVENTORY_IDS = "SELECT inventoryID FROM inventory"
@@ -79,8 +73,10 @@ class INVENTORY:
     DECREMENT_INVENTORY = "UPDATE inventory SET quantity = quantity - ? WHERE inventoryID = ?"
     SET_INVENTORY = "UPDATE inventory SET quantity = ? WHERE inventoryID = ?"
 
+    GET_STATUS = "SELECT is_available FROM inventory WHERE inventoryID = ?"
     DISABLE_ITEM = "UPDATE inventory SET is_available = 0 WHERE inventoryID = ?"
     ENABLE_ITEM = "UPDATE inventory SET is_available = 1 WHERE inventoryID = ?"  
+
     # GET_FOOD_ITEMS = "SELECT * FROM inventory INNER JOIN categories ON inventory.category = categories.categoryID "
     # GET_ITEMS_OF_CATEGORY = "SELECT  FROM category WHERE category = ?"
     # GET_ITEMS_OF_CATEGORY_LEVEL = "SELECT * FROM inventory WHERE category = ?"

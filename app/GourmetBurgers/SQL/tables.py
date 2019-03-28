@@ -12,6 +12,7 @@ data = dict(
     is_custom BOOLEAN NOT NULL CHECK (is_custom IN (0,1)),
     customID INTEGER,
     menuID INTEGER,
+    quantity INTEGER NOT NULL,
     price INTEGER NOT NULL,
     
     FOREIGN KEY (orderID) REFERENCES orders (orderID),
