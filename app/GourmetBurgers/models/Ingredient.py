@@ -71,7 +71,8 @@ class Ingredient(IngredientBase):
     def __init__(self, inventoryID):
         super().__init__(inventoryID)
 
-        query = self._db.fetchOne(self._SQL.INVENTORY.GET_STATUS, (inventoryID,))
+        query = self._db.fetchOne(
+            self._SQL.INVENTORY.GET_STATUS, (inventoryID,))
         self._is_available = query[0]
 
     @property
@@ -89,8 +90,7 @@ class Ingredient(IngredientBase):
         if change < 0:
             change = abs(change)
             self._quantity -= change
-            self._db.update(self._SQL.INVENTORY.DECREMENT_INVENTORY,
-                            (change, self._id))
+            self._db.update(self._SQL.INVENTORY.DECREMENT_INVENTORY, (change, self._id))
         else:
             self._quantity = change
             self._is_available = True

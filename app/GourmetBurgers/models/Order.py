@@ -16,11 +16,15 @@ class Order(SQLBase):
         self._items = []
 
         for foodItem in self._db.fetchAll(self._SQL.ORDERS.ORDER_ITEMS_0, (orderID,)):
-            is_custom, customID, menuID, price = foodItem
+            is_custom, customID, menuID, quantity, price = foodItem
             self._items.append(HistoricalMenuItem(
-                customID if is_custom else menuID, is_custom, price))
+                customID if is_custom else menuID, is_custom, quantity, price))
 
-            self._price += price
+            self._price += price * quantity
+        
+        # Assert
+        total = self._db.fetchOne(self._SQL.ORDERS.ORDER_TOTAL, (orderID,))[0]
+        assert total == self._price
 
     @property
     def id(self):
@@ -44,5 +48,5 @@ class Order(SQLBase):
             date=self._date,
             status=self._status,
             price=self._price,
-            items=[menuItem.toHistoricalDict() for menuItem in self._items]
+            items=[menuItem.toDict() for menuItem in self._items]
         )

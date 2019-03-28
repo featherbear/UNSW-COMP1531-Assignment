@@ -7,7 +7,7 @@ class ORDERS:
 
     # Get basic order information (and price)
     # GET_ORDER = "SELECT * FROM orders WHERE orderCode = ?"
-    GET_ORDER = "SELECT date, status, SUM(price) FROM orders INNER JOIN link_orders ON (orders.orderID = link_orders.orderID) WHERE orders.orderID = ? GROUP BY orders.orderID"
+    GET_ORDER = "SELECT date, status, SUM(price * quantity) FROM orders INNER JOIN link_orders ON (orders.orderID = link_orders.orderID) WHERE orders.orderID = ? GROUP BY orders.orderID"
 
     GET_ORDER_RAW = "SELECT date, status FROM orders WHERE orderID = ?"
 
@@ -15,7 +15,7 @@ class ORDERS:
     ORDER_STATUS = "SELECT status FROM orders WHERE orderID = ?"
 
     # Get order price
-    ORDER_TOTAL = "SELECT SUM (price) FROM link_orders WHERE orderID = ?"
+    ORDER_TOTAL = "SELECT SUM (price * quantity) FROM link_orders WHERE orderID = ?"
 
     # Get level 0 items of order
     ORDER_ITEMS_0 = "SELECT is_custom, customID, menuID, quantity, price FROM link_orders WHERE orderID = ?"

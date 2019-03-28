@@ -61,9 +61,10 @@ class MenuItem(MenuItemBase):
     def getComponentUsage(self):
         usage = {}
         for component in self._components:
-            if component.id not in usage:
-                usage[component.id] = 0
-            usage[component.id] += component.quantity
+            usage[component.id] = component.quantity
+            # if component.id not in usage:
+            #     usage[component.id] = 0
+            # usage[component.id] += component.quantity
         return usage
 
     @property
@@ -73,8 +74,6 @@ class MenuItem(MenuItemBase):
             return False
         componentUsage = self.getComponentUsage()
         for componentID in componentUsage:
-            print(
-                f"{Ingredient(componentID).quantity} < {componentUsage[componentID]}")
             if Ingredient(componentID).quantity < componentUsage[componentID]:
                 return False
         return True
@@ -109,8 +108,9 @@ class MenuItem(MenuItemBase):
 
 
 class HistoricalMenuItem(MenuItemBase):
-    def __init__(self, menuID, custom: bool, price):
+    def __init__(self, menuID, custom: bool, quantity, price):
         self._is_custom = custom
+        self._quantity = quantity
 
         if custom:
             customID = menuID
@@ -118,15 +118,25 @@ class HistoricalMenuItem(MenuItemBase):
                 self._SQL.MENU.RESOLVE_CUSTOM_TO_MENU, (customID,))
             if not menuID:
                 raise NoItemError(f"No custom menu item with id: {customID}")
+            menuID = menuID[0]
 
-        super().__init__(menuID[0])
+        super().__init__(menuID)
         self._price = price
 
-        for item in self._db.fetchAll(self._SQL.MENU.GET_CUSTOM_COMPONENTS if custom else self._SQL.MENU.GET_MAIN_COMPONENTS, (customID,)):
-            inventoryID = item[0]
-            quantity = item[1]
-            self._components.append(
-                HistoricalIngredient(inventoryID, quantity))
+        if custom:
+
+            for item in self._db.fetchAll(self._SQL.MENU.GET_CUSTOM_COMPONENTS, (customID,)):
+                inventoryID = item[0]
+                quantity = item[1]
+                self._components.append(
+                    HistoricalIngredient(inventoryID, quantity))
+        else:
+
+            for item in self._db.fetchAll(self._SQL.MENU.GET_MAIN_COMPONENTS, (menuID,)):
+                inventoryID = item[0]
+                quantity = item[1]
+                self._components.append(
+                    HistoricalIngredient(inventoryID, quantity))
 
     def toDict(self):
         components = {}
@@ -134,10 +144,16 @@ class HistoricalMenuItem(MenuItemBase):
         for item in self._components:
             components[item.id] = item.quantity
 
-        return dict(
+        resp = dict(
             id=self._id,
             name=self._name,
+            quantity=self._quantity,
             price=self._price,
-            components=components,
-            custom=self._is_custom
         )
+
+        if self._is_custom:
+            resp.update(dict(
+                components=components,
+                custom=self._is_custom)
+            )
+        return resp

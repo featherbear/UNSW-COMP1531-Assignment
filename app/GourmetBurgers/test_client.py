@@ -1,5 +1,6 @@
 readOnly = True
-
+# db = 'test_db.sqlite3'
+db = 'database.sqlite3'
 
 from system import *
 
@@ -9,7 +10,7 @@ if readOnly:
   
   import sqlite3
   
-  with sqlite3.connect('test_db.sqlite3') as _db:
+  with sqlite3.connect(db) as _db:
     queries = _db.iterdump()
     
   sys = GBsystem(':memory:')
@@ -20,39 +21,35 @@ if readOnly:
       pass
       # print(f"Skipped line - {line} - {e}")
 else:
-  sys = GBsystem('test_db.sqlite3')
+  sys = GBsystem(db)
 
-
-sys.createOrder([
-dict(
-id = 1,
-qty = 5
-),
-
-dict(
-id = 5,
-custom = True,
-qty= 1,
-items = {"1": 2}
-)
-
-]
-
-)
-
-if False:
-  print("Inventory")
-  for item in sys.inventory:
-    print(item)
+order = sys.createOrder([
+  dict(
+    id = 3,
+    qty = 1,
+    custom = True,
+    items = {
+      "4": 2
+    }
     
-  print("---")
-  inv2 = list(sys.inventory)[1]
-  inv2.updateStock(30)
-  print("---")
+    
+  )
+])
 
-  for item in sys.inventory:
-    print(item)
+print(f"Order {order.id} created: ${order.price/100}")
 
+sys.updateOrder(1)
 
+#for item in sys.inventory:
+#  print(item)
 
-print("\n".join(sys._db._conn.iterdump()))
+next(sys.inventory).available = False
+next(sys.inventory).available = True
+
+if readOnly:
+  _dump = sys._db._conn.iterdump()
+  _dump_file = "output_" + db + ".db"
+  with open(_dump_file, "w"):
+    pass
+  with sqlite3.connect(_dump_file) as f:
+    f.executescript("".join(_dump))
