@@ -91,6 +91,7 @@ data = dict(
     quantity_type INTGEGER NOT NULL,
     quantity INTEGER NOT NULL,
     stock_max INTEGER NOT NULL,
+    is_available BOOLEAN NOT NULL CHECK (is_available IN (0,1)),
     
     FOREIGN KEY (quantity_type) REFERENCES inventory (inventoryID)
   );"""  

@@ -1,24 +1,26 @@
-from lib import database
-from . import sql_GourmetBurgers as SQL
+from ..lib import database
+from . import models, sql_GourmetBurgers as SQL
 
-from . import models
 
 def getInventory():
     for inventoryItem in database.fetchAll(SQL.INVENTORY.GET_INVENTORY_IDS):
-        yield models.InventoryStock(inventoryItem[0])
+        yield models.Ingredient(inventoryItem[0])
+
 
 def getMenu():
     for menuItem in database.fetchAll(SQL.MENU.GET_MENU_ID):
         yield models.MenuItem(menuItem[0])
 
+
 def getCategories():
     data = {}
-    
+
     for categoryRecord in database.fetchAll(SQL.MENU.GET_CATEGORY_DATA):
         id, name = categoryRecord
         data[id] = name
-    
+
     return data
+
 
 def getStaffOrders(fetchAll=False):
 

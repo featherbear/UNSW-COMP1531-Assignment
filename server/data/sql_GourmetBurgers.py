@@ -49,10 +49,13 @@ class ORDERS:
 
 class MENU:
     DISABLE_ITEM = "UPDATE menu SET is_available = 0 WHERE menuID = ?"
-    ENABLE_ITEM = "UPDATE menu SET is_available = 0 WHERE menuID = ?"
+    ENABLE_ITEM = "UPDATE menu SET is_available = 1 WHERE menuID = ?"
 
     GET_MENU = "SELECT menuID, name, price, can_customise, is_available FROM menu"
     GET_MENU_ID = "SELECT menuID FROM menu"
+    GET_MENU_ITEM_BASE = "SELECT name, price FROM menu WHERE menuID = ?"
+    GET_MENU_ITEM_OPTIONS = "SELECT can_customise, is_available FROM menu WHERE menuID = ?"
+
     GET_MENU_ITEM = "SELECT name, price, can_customise, is_available FROM menu WHERE menuID = ?"
 
     # Get menuID of a custom meal
@@ -60,11 +63,6 @@ class MENU:
 
     GET_CUSTOM_COMPONENTS = "SELECT inventoryID, quantity FROM link_custom_mains WHERE customID = ?"
     GET_MAIN_COMPONENTS = "SELECT inventoryID, quantity, max FROM link_menu WHERE menuID = ?"
-
-    GET_CUSTOM_COMPONENTS_FROM_ID = "SELECT inventoryID, quantity FROM link_custom_mains WHERE customID = ?"
-    GET_MAIN_COMPONENTS_FROM_ID = "SELECT inventoryID, quantity, max FROM link_menu WHERE menuID = ?"
-
-    GET_MAIN_COMPONENT = "SELECT inventoryID, quantity, max FROM link_menu WHERE menuID = ?"
 
     GET_CATEGORY_DATA = "SELECT categoryID, name from categories"
     GET_CATEGORY_LINK = "SELECT menuID, categoryID, level FROM link_categories"
@@ -77,9 +75,12 @@ class INVENTORY:
     GET_INVENTORY_IDS = "SELECT inventoryID FROM inventory"
 
     GET_INVENTORY_ITEM = "SELECT name, suffix, price, quantity, stock_max FROM inventory, quantity_types WHERE inventory.quantity_type = quantity_types.quantityID AND inventory.inventoryID = ?"
+
     DECREMENT_INVENTORY = "UPDATE inventory SET quantity = quantity - ? WHERE inventoryID = ?"
     SET_INVENTORY = "UPDATE inventory SET quantity = ? WHERE inventoryID = ?"
-    
+
+    DISABLE_ITEM = "UPDATE inventory SET is_available = 0 WHERE inventoryID = ?"
+    ENABLE_ITEM = "UPDATE inventory SET is_available = 1 WHERE inventoryID = ?"  
     # GET_FOOD_ITEMS = "SELECT * FROM inventory INNER JOIN categories ON inventory.category = categories.categoryID "
     # GET_ITEMS_OF_CATEGORY = "SELECT  FROM category WHERE category = ?"
     # GET_ITEMS_OF_CATEGORY_LEVEL = "SELECT * FROM inventory WHERE category = ?"
