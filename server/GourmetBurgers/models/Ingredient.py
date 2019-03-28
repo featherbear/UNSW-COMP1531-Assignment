@@ -56,7 +56,9 @@ class MenuIngredient(IngredientBase):
         self._quantity_max = quantity_max
 
     def toDict(self):
-        return dict(**super().toDict(), quantity_max=self._quantity_max)
+        resp = super().toDict()
+        resp.update(dict(quantity_max=self._quantity_max))
+        return resp
 
 
 class HistoricalIngredient(IngredientBase):
@@ -97,4 +99,6 @@ class Ingredient(IngredientBase):
         return self._quantity / self._quantity_max <= 0.3 if self._quantity_max else False
 
     def toDict(self):
-        return dict(**super().toDict(), quantity=self._quantity if self._is_available else 0)
+        resp = super().toDict()
+        resp.update(dict(quantity=self._quantity if self._is_available else 0))
+        return resp
