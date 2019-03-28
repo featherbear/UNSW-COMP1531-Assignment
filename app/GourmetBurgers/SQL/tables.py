@@ -89,7 +89,7 @@ data = dict(
   CREATE TABLE IF NOT EXISTS inventory (
     inventoryID INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    price INTEGER NOT NULL,
+    price INTEGER,
     quantity_type INTGEGER NOT NULL,
     quantity INTEGER NOT NULL,
     stock_max INTEGER NOT NULL,
