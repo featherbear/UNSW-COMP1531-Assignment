@@ -3,9 +3,34 @@
 {% set title = "Menu" %}
 
 {% block head %}
-<!-- this is in the head -->
+<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/menu.css" />
 {% endblock %}
 
 {% block content %}
-<!-- this in the content -->
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+
+<div class="search">
+    <input class="search-bar" type="text" placeholder="Search for an item..."></input>
+    <select class="sort-order">
+        <option value="nameAsc">Name (A-Z)</option>
+        <option value="nameDesc">Name (Z-A)</option>
+        <option value="priceAsc">Price (Ascending)</option>
+        <option value="priceDesc">Price (Descending)</option>
+    </select> 
+</div>
+
+<div class="menu no-select">
+    <div class="categories">
+        <div>Filter by Category</div>
+        <ul>
+            <!-- Categories -->
+        </ul>
+    </div>
+
+    <div id="menu-grid">
+        <!-- Menu Items -->
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/menu.js"></script>
 {% endblock %}
