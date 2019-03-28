@@ -99,10 +99,7 @@ class MenuItem(MenuItemBase):
         return dict(
             id=self._id,
             name=self._name,
-<<<<<<< HEAD
-=======
             description = self._description,
->>>>>>> feature/browse-menu
             price=self._price,
             can_customise=not not self._can_customise,
             available=self.available,
