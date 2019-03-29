@@ -104,7 +104,8 @@ class GBSystem:
 
             ingredients = foodItem.get("items", {})
             # Convert key from str to int
-            ingredients = dict([(int(key), val) for key, val in ingredients.items()])
+            ingredients = dict([(int(key), val)
+                                for key, val in ingredients.items()])
 
             # Check that menuID exists
             if int(menuID) not in _menuMap:
@@ -112,17 +113,20 @@ class GBSystem:
 
             # Check that the item is available
             if not _menuMap[menuID].available:
-                raise Exception("Unavailable")
+                raise models.OutOfStockError(menuID)
 
             mainIngredients = _menuMap[menuID].getComponentUsage()
             # Check validity for custom items
             if custom:
                 # Check if it is customisable
                 if not self._db.fetchOne(SQL.MENU.CAN_CUSTOMISE, (menuID,)):
-                    raise Exception(f"Menu ID {menuID} not customisable")
+                    raise models.IntegrityError(
+                        f"Menu item {menuID} not customisable")
+
                 # Check that there are ingredients
                 if len(ingredients) is 0:
-                    raise Exception("No ingredients in custom order item")
+                    raise models.IntegrityError(
+                        "No ingredients in custom order item")
 
                 # Calculate menu delta
                 delta = {}
@@ -148,7 +152,7 @@ class GBSystem:
                 _inventoryLevels[int(ingredientID)
                                  ] -= ingredients[ingredientID] * quantity
                 if _inventoryLevels[int(ingredientID)] < 0:
-                    raise Exception("Not enough stock")
+                    raise models.OutOfStockError(f"Not enough stock for ingredient {ingredientID}")
 
         """
         TRANSACTION
