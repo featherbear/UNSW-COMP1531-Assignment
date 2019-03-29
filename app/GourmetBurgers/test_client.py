@@ -2,7 +2,7 @@ readOnly = True
 # db = 'test_db.sqlite3'
 db = 'database.sqlite3'
 
-from system import *
+from .system import *
 
 if readOnly:
   # https://stackoverflow.com/a/4019182

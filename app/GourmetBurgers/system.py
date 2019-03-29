@@ -1,20 +1,25 @@
-import SQL
-import models
-import utils
-
+from . import SQL, models, utils
 
 class GBsystem:
     def __init__(self, db: str = None):
         print("=== Initialising GourmetBurgers System ===")
-        print(f"Database: {db}")
 
         # Initialise db
+        self._db = SQL.Database(db)
+        print(f"Database: {self._db._db_file}")
+
         models._SQLBase.SQLBase._db = self._db = SQL.Database(db)
         models._SQLBase.SQLBase._SQL = self._SQL = SQL
 
         # Create SQL tables
         for value in SQL.TableQueries.values():
             self._db.create_table(value)
+
+    @property
+    def db(self):
+        return self._db
+    
+    SQL = SQL
 
     @property
     def inventory(self):

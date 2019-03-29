@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template
-from lib import util
 
 site = Blueprint(__name__, __name__)
 

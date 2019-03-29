@@ -1,5 +1,5 @@
 from GourmetBurgers import models
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, g, current_app as app
 from lib import util
 
 site = Blueprint(__name__, __name__)

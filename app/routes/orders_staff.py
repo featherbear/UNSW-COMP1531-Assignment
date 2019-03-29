@@ -1,9 +1,8 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, g, current_app as app
 
 site = Blueprint(__name__, __name__)
 
 from lib import util
-from GourmetBurgers import methods
 
 @site.route('/staff/orders/')
 def view_staffOrder():
@@ -16,13 +15,13 @@ def update_order():
 @site.route('/staff/orders.json')
 def get_customerOrder():
    data = []
-   for order in methods.getStaffOrders():
+   for order in app.GB.getStaffOrders():
       data.append(order.toDict())
    return util.createJSON(True, dict(data=data))
 
 @site.route('/staff/ordersAll.json')
 def get_customerOrderAll():
    data = []
-   for order in methods.getStaffOrders(True):
+   for order in app.GB.getStaffOrders(True):
       data.append(order.toDict())
    return util.createJSON(True, dict(data=data))
