@@ -12,13 +12,13 @@ def view_customerOrder():
 
 @site.route('/order/json', methods=["POST"])
 def get_customerOrder():
-   orderID = request.json.get("orderID")
-    
-   try:
-      order = models.Order(orderID)
-      return util.createJSON(True, dict(data=order.toDict()))
-   except models.NoItemError as e:
-      return util.createJSON(False, dict(error=str(e)))
+    orderID = request.json.get("orderID")
+
+    try:
+        order = models.Order(orderID)
+        return util.createJSON(True, dict(data=order.toDict()))
+    except models.NoItemError as e:
+        return util.createJSON(False, dict(error=str(e)))
 
 
 @site.route('/order/new', methods=["POST"])

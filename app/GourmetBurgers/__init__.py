@@ -1,1 +1,1 @@
-from .system import GBsystem
+from .system import GBSystem

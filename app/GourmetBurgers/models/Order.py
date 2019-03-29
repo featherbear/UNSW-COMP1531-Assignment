@@ -5,6 +5,7 @@ from ._SQLBase import SQLBase
 
 class Order(SQLBase):
     def __init__(self, orderID):
+        # Fetch data from database
         query = self._db.fetchOne(self._SQL.ORDERS.GET_ORDER_RAW, (orderID,))
         if not query:
             raise NoItemError(f"No order with id: {orderID}")
@@ -15,14 +16,16 @@ class Order(SQLBase):
 
         self._items = []
 
+        # Add food items of the order
         for foodItem in self._db.fetchAll(self._SQL.ORDERS.ORDER_ITEMS_0, (orderID,)):
             is_custom, customID, menuID, quantity, price = foodItem
             self._items.append(HistoricalMenuItem(
                 customID if is_custom else menuID, is_custom, quantity, price))
 
+            # Update price
             self._price += price * quantity
-        
-        # Assert
+
+        # Validation
         total = self._db.fetchOne(self._SQL.ORDERS.ORDER_TOTAL, (orderID,))[0]
         assert total == self._price
 
@@ -42,6 +45,7 @@ class Order(SQLBase):
     def price(self):
         return self._price
 
+    # Serialise object into a dict
     def toDict(self):
         return dict(
             id=self._id,

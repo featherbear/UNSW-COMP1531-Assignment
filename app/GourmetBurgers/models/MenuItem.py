@@ -1,16 +1,21 @@
 from .Exceptions import NoItemError
 from .Ingredient import MenuIngredient, HistoricalIngredient, Ingredient
 from ._SQLBase import SQLBase
+from abc import ABC, abstractmethod
 
-
-class MenuItemBase(SQLBase):
+class MenuItemBase(SQLBase, ABC):
+    @abstractmethod
     def __init__(self, menuID, price=None):
+        # Fetch data from database
         query = self._db.fetchOne(self._SQL.MENU.GET_MENU_ITEM_BASE, (menuID,))
         if not query:
             raise NoItemError(f"No menu item with id: {menuID}")
+
         self._id = menuID
         self._name, self._price = query
+        self._components = []
 
+        # Get categories
         query = self._db.fetchAll(self._SQL.MENU.GET_CATEGORIES, (menuID,))
         self._categories = {}
         for categoryRecord in query:
@@ -20,7 +25,6 @@ class MenuItemBase(SQLBase):
             else:
                 self._categories[level].append(categoryID)
 
-        self._components = []
 
     @property
     def id(self):
@@ -46,10 +50,12 @@ class MenuItemBase(SQLBase):
 class MenuItem(MenuItemBase):
     def __init__(self, menuID):
         super().__init__(menuID)
-        query = self._db.fetchOne(
-            self._SQL.MENU.GET_MENU_ITEM_OPTIONS, (menuID,))
+        
+        # Fetch data from database, assume data exists if the super call completes
+        query = self._db.fetchOne(self._SQL.MENU.GET_MENU_ITEM_OPTIONS, (menuID,))
         self._can_customise, self._is_available, self._description = query
 
+        # Add default ingredients
         for item in self._db.fetchAll(self._SQL.MENU.GET_MAIN_COMPONENTS, (menuID,)):
             component = MenuIngredient(*item)
             self._components.append(component)
@@ -58,6 +64,7 @@ class MenuItem(MenuItemBase):
     def can_customise(self):
         return self._can_customise
 
+    # Get the ingredients and the quantity used
     def getComponentUsage(self):
         usage = {}
         for component in self._components:
@@ -67,9 +74,9 @@ class MenuItem(MenuItemBase):
             # usage[component.id] += component.quantity
         return usage
 
+    # Check all the components, if there are not enough items in the stock for all of the components, return False
     @property
     def available(self):
-        # Check all the components, if there are not enough items in the stock for all of the components, return False
         if not self._is_available:
             return False
         componentUsage = self.getComponentUsage()
@@ -78,6 +85,7 @@ class MenuItem(MenuItemBase):
                 return False
         return True
 
+    # Update available state
     @available.setter
     def available(self, state):
         state = bool(state)
@@ -85,7 +93,8 @@ class MenuItem(MenuItemBase):
         self._db.update(
             self._SQL.MENU.ENABLE_ITEM if state else self._SQL.MENU.DISABLE_ITEM, (self._id,))
 
-    def toMenuDict(self):
+    # Serialise object into a dict
+    def toDict(self):
         components = []
 
         for item in self._components:
@@ -108,10 +117,10 @@ class MenuItem(MenuItemBase):
 
 
 class HistoricalMenuItem(MenuItemBase):
-    def __init__(self, menuID, custom: bool, quantity, price):
+    def __init__(self, menuID, custom, quantity, price):
         self._is_custom = custom
-        self._quantity = quantity
 
+        # If a custom ID was provided, resolve for the original menuID
         if custom:
             customID = menuID
             menuID = self._db.fetchOne(
@@ -121,23 +130,25 @@ class HistoricalMenuItem(MenuItemBase):
             menuID = menuID[0]
 
         super().__init__(menuID)
+        self._quantity = quantity
         self._price = price
 
         if custom:
-
+            # Add custom ingredients
             for item in self._db.fetchAll(self._SQL.MENU.GET_CUSTOM_COMPONENTS, (customID,)):
                 inventoryID = item[0]
                 quantity = item[1]
                 self._components.append(
                     HistoricalIngredient(inventoryID, quantity))
         else:
-
+            # Add main ingredients
             for item in self._db.fetchAll(self._SQL.MENU.GET_MAIN_COMPONENTS, (menuID,)):
                 inventoryID = item[0]
                 quantity = item[1]
                 self._components.append(
                     HistoricalIngredient(inventoryID, quantity))
 
+    # Serialise object into dict
     def toDict(self):
         components = {}
 

@@ -1,48 +1,46 @@
 from . import SQL, models, utils
 
-class GBsystem:
+
+class GBSystem:
     def __init__(self, db: str = None):
         print("=== Initialising GourmetBurgers System ===")
 
-        # Initialise db
-        self._db = SQL.Database(db)
-        print(f"Database: {self._db._db_file}")
-
+        # Initialise database
         models._SQLBase.SQLBase._db = self._db = SQL.Database(db)
         models._SQLBase.SQLBase._SQL = self._SQL = SQL
+        print(f"Database: {self._db._db_file}")
 
         # Create SQL tables
         for value in SQL.TableQueries.values():
             self._db.create_table(value)
 
-    @property
-    def db(self):
-        return self._db
-    
-    SQL = SQL
-
+    # Get all ingredients
     @property
     def inventory(self):
         for inventoryItem in self._db.fetchAll(SQL.INVENTORY.GET_INVENTORY_IDS):
             yield models.Ingredient(inventoryItem[0])
 
+    # Get ingredient dictionary (key: ID)
     def getInventoryMap(self):
         inventory = {}
         for item in self.inventory:
             inventory[item.id] = item
         return inventory
 
+    # Get all menu items
     @property
     def menu(self):
         for menuItem in self._db.fetchAll(SQL.MENU.GET_MENU_ID):
             yield models.MenuItem(menuItem[0])
 
+    # Get menu dictionary (key: ID)
     def getMenuMap(self):
         menu = {}
         for item in self.menu:
             menu[item.id] = item
         return menu
 
+    # Get category name mapping dictionary
     @property
     def categories(self):
         data = {}
@@ -53,21 +51,24 @@ class GBsystem:
 
         return data
 
-    def getStaffOrders(self, fetchAll=False):
+    # Get all past orders
+    def getOrders(self, fetchAll=False):
         if fetchAll:
-            query = self._db.fetchAll(SQL.ORDERS.STAFF_GET_ALL_ORDERS)
+            query = self._db.fetchAll(SQL.ORDERS.GET_ALL_ORDERS)
         else:
-            query = self._db.fetchAll(SQL.ORDERS.STAFF_GET_ORDERS)
+            query = self._db.fetchAll(SQL.ORDERS.GET_ORDERS)
 
         for order in query:
             yield models.Order(order[0])
 
+    # Get order by orderID
     def getOrder(self, orderID):
         return models.Order(orderID)
 
+    # Create an order
     def createOrder(self, orderData):
         """
-        # orderData 
+        # orderData structure
         [
             {
                 id: <id: int>,
@@ -86,19 +87,24 @@ class GBsystem:
 
         price = 0
 
-        # Validation
+        """
+        VALIDATION
+        """
+
+        # Get inventory stock levels
         _inventoryLevels = {}
         for ingredient in _inventoryMap.values():
             _inventoryLevels[ingredient.id] = ingredient.quantity
 
+        # Validate each food item
         for foodItem in orderData:
             menuID = int(foodItem["id"])
             quantity = int(foodItem.get("qty", 1))
             custom = bool(foodItem.get("custom", 0))
 
             ingredients = foodItem.get("items", {})
-            ingredients = dict([(int(key), val)
-                                for key, val in ingredients.items()])
+            # Convert key from str to int
+            ingredients = dict([(int(key), val) for key, val in ingredients.items()])
 
             # Check that menuID exists
             if int(menuID) not in _menuMap:
@@ -144,9 +150,14 @@ class GBsystem:
                 if _inventoryLevels[int(ingredientID)] < 0:
                     raise Exception("Not enough stock")
 
-        # Transaction
+        """
+        TRANSACTION
+        """
+
+        # Get timestamp (epoch)
         ts = utils.getTime()
 
+        # Create SQL rows
         orderID = self._db.insert(SQL.ORDERS.CREATE_ORDER, (ts,))
         for foodItem in orderData:
             menuID = int(foodItem["id"])
@@ -156,10 +167,12 @@ class GBsystem:
             ingredients = foodItem.get(
                 "items", {}) if custom else _menuMap[menuID].getComponentUsage()
 
+            # Decrease inventory stock
             for ingredientID, qty in ingredients.items():
                 _inventoryMap[int(ingredientID)
                               ].updateStock(-1 * quantity * qty)
 
+            # Create custom order data
             if custom:
                 customID = self._db.insert(
                     SQL.ORDERS.CREATE_CUSTOM_MAIN, (menuID,))
@@ -169,7 +182,6 @@ class GBsystem:
                                     (customID, ingredientID, ingredients[ingredientID]))
                 self._db.insert(SQL.ORDERS.CREATE_LINK_ORDER__CUSTOM,
                                 (orderID, customID, quantity, price))
-
             else:
                 self._db.insert(SQL.ORDERS.CREATE_LINK_ORDER,
                                 (orderID, menuID, quantity, price))
@@ -189,5 +201,6 @@ class GBsystem:
                 CREATE_LINK_ORDER
         """
 
+    # Complete an order
     def updateOrder(self, orderID):
         self._db.update(self._SQL.ORDERS.COMPLETE_ORDER, (orderID,))

@@ -1,9 +1,12 @@
+# TODO: Remove unused queries
+# TODO: Documentation
+
 class ORDERS:
     # Get orders in the queue
-    STAFF_GET_ORDERS = "SELECT orderID FROM orders WHERE status = 0"
+    GET_ORDERS = "SELECT orderID FROM orders WHERE status = 0"
 
     # Get all orders
-    STAFF_GET_ALL_ORDERS = "SELECT orderID FROM orders"
+    GET_ALL_ORDERS = "SELECT orderID FROM orders"
 
     # Get basic order information (and price)
     # GET_ORDER = "SELECT * FROM orders WHERE orderCode = ?"
@@ -81,9 +84,3 @@ class INVENTORY:
     # GET_ITEMS_OF_CATEGORY = "SELECT  FROM category WHERE category = ?"
     # GET_ITEMS_OF_CATEGORY_LEVEL = "SELECT * FROM inventory WHERE category = ?"
     # CHECK_STOCK = "SELECT * FROM inventory WHERE ID = ?"
-
-
-# def createOrder():
-#   orderCreated = time()
-#   orderComplete = False
-#   orderID = database.insert(ORDERS.CREATE_ORDER, orderCreated, orderComplete, commit = False)

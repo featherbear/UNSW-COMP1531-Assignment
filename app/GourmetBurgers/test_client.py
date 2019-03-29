@@ -13,7 +13,7 @@ if readOnly:
   with sqlite3.connect(db) as _db:
     queries = _db.iterdump()
     
-  sys = GBsystem(':memory:')
+  sys = GBSystem(':memory:')
   for line in queries:
     try:
       sys._db._conn.executescript(line)
@@ -21,7 +21,7 @@ if readOnly:
       pass
       # print(f"Skipped line - {line} - {e}")
 else:
-  sys = GBsystem(db)
+  sys = GBSystem(db)
 
 order = sys.createOrder([
   dict(
