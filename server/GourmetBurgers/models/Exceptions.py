@@ -1,2 +1,0 @@
-class NoItemError(Exception):
-    pass

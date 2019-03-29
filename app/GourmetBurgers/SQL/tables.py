@@ -12,6 +12,7 @@ data = dict(
     is_custom BOOLEAN NOT NULL CHECK (is_custom IN (0,1)),
     customID INTEGER,
     menuID INTEGER,
+    quantity INTEGER NOT NULL,
     price INTEGER NOT NULL,
     
     FOREIGN KEY (orderID) REFERENCES orders (orderID),
@@ -88,7 +89,7 @@ data = dict(
   CREATE TABLE IF NOT EXISTS inventory (
     inventoryID INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    price INTEGER NOT NULL,
+    price INTEGER,
     quantity_type INTGEGER NOT NULL,
     quantity INTEGER NOT NULL,
     stock_max INTEGER NOT NULL,
