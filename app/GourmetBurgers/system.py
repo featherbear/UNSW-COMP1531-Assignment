@@ -207,4 +207,4 @@ class GBSystem:
 
     # Complete an order
     def updateOrder(self, orderID):
-        self._db.update(self._SQL.ORDERS.COMPLETE_ORDER, (orderID,))
+        self.getOrder(orderID).completeOrder()

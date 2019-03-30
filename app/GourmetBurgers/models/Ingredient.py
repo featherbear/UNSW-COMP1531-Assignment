@@ -24,12 +24,12 @@ class IngredientBase(SQLBase, ABC):
         return self._name
 
     @property
-    def price(self):
-        return self._price
-
-    @property
     def suffix(self):
         return self._suffix
+
+    @property
+    def price(self):
+        return self._price
 
     @property
     def quantity(self):

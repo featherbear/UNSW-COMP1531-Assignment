@@ -39,13 +39,12 @@ class MenuItemBase(SQLBase, ABC):
         return self._price
 
     @property
-    def categories(self):
-        return self._categories
-
-    @property
     def components(self):
         return self._components
 
+    @property
+    def categories(self):
+        return self._categories
 
 class MenuItem(MenuItemBase):
     def __init__(self, menuID):
@@ -73,6 +72,10 @@ class MenuItem(MenuItemBase):
             #     usage[component.id] = 0
             # usage[component.id] += component.quantity
         return usage
+
+    @property
+    def description(self):
+        return self._description
 
     # Check all the components, if there are not enough items in the stock for all of the components, return False
     @property
@@ -147,6 +150,10 @@ class HistoricalMenuItem(MenuItemBase):
                 quantity = item[1]
                 self._components.append(
                     HistoricalIngredient(inventoryID, quantity))
+
+    @property
+    def is_custom(self):
+        return self._is_custom
 
     # Serialise object into dict
     def toDict(self):
