@@ -45,6 +45,15 @@ class Order(SQLBase):
     def price(self):
         return self._price
 
+    @property
+    def items(self):
+        return self._items
+
+    def completeOrder(self):
+        self._status = True
+        self._db.update(self._SQL.ORDERS.COMPLETE_ORDER, (self.id,))
+        
+
     # Serialise object into a dict
     def toDict(self):
         return dict(
