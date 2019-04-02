@@ -16,8 +16,8 @@
 		<tr>
 			<td>
 				<table width="100%" border="1" style="width: 800px; height: 80px" align="center">
-					<th>Orders ID</th><th>Order Details</th><th>Order Status</th><th>Operations</th>		
-					{% for order in orders %}				
+					<th>Orders ID</th><th>Order Details</th><th>Order Status</th><th>Change Status</th>		
+					{% for order in orders %}
 						<tr>
 							<td align="center">order.id</td>
 							{% for menuItem in order._items %}
@@ -25,14 +25,17 @@
 							{% endfor %}
 							<td align="center">order._status</td>
 							<td align="center">
+								<!-- <input type = "button" value = "Cooked"> -->
+							
+							
 								<button onclick="changeStatus()">Cooked</button>
-								<p id="demo"></p>
+								<p id="status"></p>
 							</td>
 
 							<script>
 								function changeStatus(){
-									order._status = 
-									document.getElementById("demo").innerHTML = "Status Changed!";
+									// order._status = 
+									document.getElementById("status").innerHTML = "Status Changed!";
 								}
 							</script>
 
