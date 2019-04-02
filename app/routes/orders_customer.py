@@ -24,6 +24,7 @@ def get_customerOrder():
 @site.route('/order/new', methods=["POST"])
 def placeOrder():
     app.GB.createOrder(request.data)
+    return render_template("orders_customer_completed.html")
 
 
 
