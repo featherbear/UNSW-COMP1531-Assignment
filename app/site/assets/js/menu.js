@@ -66,7 +66,7 @@ function ready() {
       addToCart.classList.add("add");
       addToCart.innerText = "Add to Cart";
       addToCart.addEventListener("click", function() {
-        GourmetBurgers.cart.addToOrder(this.parentElement.parentElement.menuID);
+        GourmetBurgers.cart.addToOrder(menuID);
       });
       footer.appendChild(addToCart);
     }
