@@ -100,6 +100,8 @@ let GourmetBurgers;
         if (data && !self._menu[id].can_customise)
           throw Error(`Cannot customise id ${id}`);
 
+        // TODO: Check if there are enough ingredients
+
         // Check if the menu item has been added before, if so increase the quantity
         for (let item of self.cart._data) {
           if (item.id !== id) continue;
