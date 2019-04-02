@@ -23,6 +23,10 @@ function ready() {
     elem.classList.add("menu-item");
     elem.innerText = item.name;
 
+    let desc = document.createElement("div");
+    desc.innerText = item.description;
+    elem.appendChild(desc);
+
     let price = document.createElement("span");
     price.classList.add("price");
     price.innerText = item.price / 100;
@@ -38,6 +42,9 @@ function ready() {
     let addToCart = document.createElement("div");
     addToCart.classList.add("add");
     addToCart.innerText = "Add to cart";
+    addToCart.addEventListener("click", function() {
+      GourmetBurgers.cart.addToOrder(this.parentElement.parentElement.menuID);
+    });
     elem.appendChild(addToCart);
 
     container.appendChild(elem);
@@ -98,7 +105,7 @@ function ready() {
     let elem = document.createElement("li");
     elem.addEventListener("click", () => selectCategory(undefined));
     elem.innerText = "All Items";
-    elem.classList.add('active');
+    elem.classList.add("active");
     menuCategoriesMap[undefined] = elem;
     categoryMenu.appendChild(elem);
 
