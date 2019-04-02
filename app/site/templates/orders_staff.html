@@ -11,27 +11,33 @@
 </br>
 
 <body>
+	{{ orders }}
 	<table width="100%" align="center" >
 		<tr>
 			<td>
 				<table width="100%" border="1" style="width: 800px; height: 80px" align="center">
-					<th>Orders ID</th><th>Order Status</th>
-					<tr>
-						<td>
-							<ul>
-								{% for order in orders %}
-								
-								{% endfor %}
-							</ul>
-						</td>
-						<td>
-							<ul>
-								{% for order in orders %}
-								
-								{% endfor %}
-							</ul>
-						</td>
-					</tr>
+					<th>Orders ID</th><th>Order Details</th><th>Order Status</th><th>Operations</th>		
+					{% for order in orders %}				
+						<tr>
+							<td align="center">order.id</td>
+							{% for menuItem in order._items %}
+							<td align="center">menuItem._name</td>
+							{% endfor %}
+							<td align="center">order._status</td>
+							<td align="center">
+								<button onclick="changeStatus()">Cooked</button>
+								<p id="demo"></p>
+							</td>
+
+							<script>
+								function changeStatus(){
+									order._status = 
+									document.getElementById("demo").innerHTML = "Status Changed!";
+								}
+							</script>
+
+						</tr>
+					{% endfor %}
 				</table>
 			</td> 
 		</tr>

@@ -23,13 +23,17 @@ def get_customerOrder():
 
 @site.route('/order/new', methods=["POST"])
 def placeOrder():
+    app.GB.createOrder(request.data)
 
-    import string
-    import random
-    orderID = ''.join(random.choice(
-        string.ascii_uppercase + string.digits) for _ in range(10))
-    print(f"New order created: {orderID}")
 
-    print(request.get_json())
 
-    return util.createJSON(True, orderID=3)
+     
+    # import string
+    # import random
+    # orderID = ''.join(random.choice(
+    #     string.ascii_uppercase + string.digits) for _ in range(10))
+    # print(f"New order created: {orderID}")
+
+    # print(request.get_json())
+
+    # return util.createJSON(True, orderID=3)
