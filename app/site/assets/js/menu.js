@@ -87,14 +87,16 @@ function ready() {
 
   //
 
-  Object.values(menu).forEach(menuItem => {
-    // Add level 0 categories of the current item to `menuCategories`
-    if (menuItem.categories.hasOwnProperty(0))
-      menuCategories.push(...menuItem.categories[0]);
+  Object.values(menu)
+    .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase())
+    .forEach(menuItem => {
+      // Add level 0 categories of the current item to `menuCategories`
+      if (menuItem.categories.hasOwnProperty(0))
+        menuCategories.push(...menuItem.categories[0]);
 
-    // Add element to DOM
-    grid.appendChild(createMenuElem(menuItem.id));
-  });
+      // Add element to DOM
+      grid.appendChild(createMenuElem(menuItem.id));
+    });
 
   // Extract unique categoryIDs from `menuCategories`
   menuCategories = Array.from(new Set(menuCategories));
@@ -130,7 +132,8 @@ function ready() {
       nameDesc: false,
       priceAsc: true,
       priceDesc: false
-    }
+    },
+    stagger: 40
   });
 
   // Handle sorting
@@ -142,7 +145,6 @@ function ready() {
 
   // Handle searching
   document.querySelector(".search input").addEventListener("input", function() {
-    // TODO: Fuzzy search maybe?
     selectCategory(undefined, true);
     let needle = this.value.toLowerCase();
     iso.arrange({
