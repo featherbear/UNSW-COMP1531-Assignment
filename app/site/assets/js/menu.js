@@ -21,32 +21,59 @@ function ready() {
 
     let elem = document.createElement("div");
     elem.classList.add("menu-item");
-    elem.innerText = item.name;
 
-    let desc = document.createElement("div");
-    desc.innerText = item.description;
-    elem.appendChild(desc);
+    //
+    let header = document.createElement("div");
+    header.classList.add("header");
+
+    let content = document.createElement("div");
+    content.classList.add("content");
+
+    let footer = document.createElement("div");
+    footer.classList.add("footer");
+    //
+
+    let name = document.createElement("div");
+    name.classList.add("name");
+    name.innerText = item.name;
+    header.appendChild(name);
 
     let price = document.createElement("span");
     price.classList.add("price");
     price.innerText = item.price / 100;
-    elem.appendChild(price);
+    header.appendChild(price);
 
-    if (item.can_customise) {
-      // TODO: Add customise
-    }
+    let desc = document.createElement("div");
+    desc.classList.add("description");
+    desc.innerText = item.description;
+    content.appendChild(desc);
 
     // Disable item if not available
-    if (!item.available) elem.classList.add("disabled");
+    if (!item.available) {
+      elem.classList.add("disabled");
+    } else {
+      if (item.can_customise) {
+        let cust = document.createElement("div");
+        cust.classList.add("customise");
+        cust.innerText = "Customise";
+        cust.addEventListener("click", function() {
+          // TODO: Add customise
+        });
+        footer.appendChild(cust);
+      }
 
-    let addToCart = document.createElement("div");
-    addToCart.classList.add("add");
-    addToCart.innerText = "Add to cart";
-    addToCart.addEventListener("click", function() {
-      GourmetBurgers.cart.addToOrder(this.parentElement.parentElement.menuID);
-    });
-    elem.appendChild(addToCart);
+      let addToCart = document.createElement("div");
+      addToCart.classList.add("add");
+      addToCart.innerText = "Add to Cart";
+      addToCart.addEventListener("click", function() {
+        GourmetBurgers.cart.addToOrder(this.parentElement.parentElement.menuID);
+      });
+      footer.appendChild(addToCart);
+    }
 
+    elem.appendChild(header);
+    elem.appendChild(content);
+    elem.appendChild(footer);
     container.appendChild(elem);
 
     return container;
@@ -97,6 +124,11 @@ function ready() {
       // Add element to DOM
       grid.appendChild(createMenuElem(menuItem.id));
     });
+
+  // Clamp descriptions so that they only have 5 lines
+  document
+    .querySelectorAll(".menu-item .description")
+    .forEach(e => $clamp(e, { clamp: 5 }));
 
   // Extract unique categoryIDs from `menuCategories`
   menuCategories = Array.from(new Set(menuCategories));
