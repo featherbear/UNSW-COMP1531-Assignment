@@ -8,10 +8,11 @@
 
 {% block content %}
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clamp-js@0.7.0/clamp.min.js"></script>
 
 <div class="search">
     <input class="search-bar" type="text" placeholder="Search for an item..."></input>
-    <select class="sort-order">
+    <select class="sort-order" autocomplete="off">
         <option value="nameAsc">Name (A-Z)</option>
         <option value="nameDesc">Name (Z-A)</option>
         <option value="priceAsc">Price (Ascending)</option>

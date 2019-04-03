@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/site.css" />
-<script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/GourmetBurgers.js" defer></script>
+<script src="/assets/js/site.js" defer></script>
 <!-- <script src="main.js"></script> -->
 
 {% block head %}{% endblock %}
@@ -24,20 +24,13 @@
 <header>
 <div class="container no-select">
   <a href="/cart">
-  <div class="cart">
-    <span name="itemCount">0</span> items
+    <div class="cart">Your Order: $<span name="orderTotal"></span></div>
+  </a>
+<script type="text/javascript">
 
-  </div>
-</a>
-  <style>
-  .cart {
-    right: 0;
-    top: 0;
-    position: absolute;
-  }
 
-  </style>
-  <div class="logo">
+</script>
+<div class="logo">
     <a href="/"><img src="/assets/img/BURGAAAAA.svg" /> </a>
   </div>
   <div class="menu">

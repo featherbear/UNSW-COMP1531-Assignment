@@ -17,3 +17,12 @@ if (sessionStorage.getItem("loaded") != "true") {
   );
   elemSlug && elemSlug.classList.add("active");
 }
+
+function updateTotal() {
+  if (GourmetBurgers.cart._data) {
+    document.querySelector('.cart [name=orderTotal]').innerText = (GourmetBurgers.cart.calculate()/100).toFixed(2);
+    document.querySelector('.cart').classList.add('active');
+  } else {
+    document.querySelector('.cart').classList.remove('active');
+  }
+}
