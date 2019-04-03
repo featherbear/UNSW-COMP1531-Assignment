@@ -65,8 +65,7 @@ html {
 
 /* Menu Item */
 .menu-item {
-  cursor: pointer;
-  background-color: #fdf6f0;
+  background-color: rgba(253, 246, 240, 0.96);
 
   flex: 1;
 
@@ -76,8 +75,14 @@ html {
   margin-bottom: 3px;
   margin-left: 3px;
 
+  transition: background-color 0.5s;
+
   /* Fix positioning for Firefox !?!?!? */
   filter: grayscale(0%);
+}
+
+.menu-item:hover {
+  background-color: rgba(253, 246, 240, 1);
 }
 
 .menu-item .header .name {
@@ -113,7 +118,9 @@ html {
   right: 0;
   text-align: center;
 
-  color: grey;
+  cursor: pointer;
+
+  color: white;
 
   opacity: 0;
   transition: opacity 0.3s;
@@ -128,16 +135,17 @@ html {
   padding-bottom: 5px;
   padding-right: 5px;
 
-  transition: background-color 0.5s, font-size 0.5s, color 0.5s;
-}
-
-.menu-item:hover .footer *:hover {
-  color: black;
+  transition: background-color 0.5s;
 }
 
 .menu-item .footer :first-child {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
+}
+
+.menu-item .footer :last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .menu-item .footer .add {
@@ -155,7 +163,7 @@ html {
 }
 
 .menu-item.disabled {
-  background-color: grey;
+  background-color: rgba(253, 246, 240, 0.8);
   cursor: default;
   pointer-events: none;
 

@@ -1,4 +1,4 @@
-readOnly = True
+readOnly = False
 # db = 'test_db.sqlite3'
 db = 'database.sqlite3'
 
@@ -23,11 +23,12 @@ if readOnly:
 else:
   sys = GBSystem(db)
 
+
 order = sys.createOrder([
   dict(
-    id = 3,
+    id = 4,
     qty = 1,
-    custom = True,
+    custom = False,
     items = {
       "4": 2
     }
@@ -35,7 +36,7 @@ order = sys.createOrder([
     
   )
 ])
-
+'''
 print(f"Order {order.id} created: ${order.price/100}")
 
 sys.updateOrder(1)
@@ -45,11 +46,14 @@ sys.updateOrder(1)
 
 next(sys.inventory).available = False
 next(sys.inventory).available = True
+'''
 
 if readOnly:
-  _dump = sys._db._conn.iterdump()
+  _dump = list(sys._db._conn.iterdump())
   _dump_file = "output_" + db + ".db"
   with open(_dump_file, "w"):
     pass
   with sqlite3.connect(_dump_file) as f:
     f.executescript("".join(_dump))
+  [print(line) for line in _dump]
+    
