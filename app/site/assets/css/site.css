@@ -120,6 +120,17 @@ footer .greybox {
   margin: 10px auto;
   background-color: rgba(0, 0, 0, 0.4);
 }
+footer .greybox .staff {
+  float: left;
+  margin-left: 5px;
+}
+footer .greybox .staff a,
+footer .greybox .staff a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+
 footer ul {
   margin: 0;
 }
