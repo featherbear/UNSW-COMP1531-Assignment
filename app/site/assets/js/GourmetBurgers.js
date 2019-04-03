@@ -29,7 +29,7 @@ let GourmetBurgers;
 
     // Calculate order total
     cart: {
-      calulate: () => {
+      calculate: () => {
         let sum = 0;
         for (let item of self.cart._data) {
           console.log("Looking at", item);
@@ -92,7 +92,7 @@ let GourmetBurgers;
       addToOrder: function(id, data) {
         self.cart.__addToOrder(id, data);
         self.cart._updateOrder();
-        console.log(self.cart.calulate());
+        console.log(self.cart.calculate());
       },
       __addToOrder: function(id, data) {
         // Validate `id` and `data`

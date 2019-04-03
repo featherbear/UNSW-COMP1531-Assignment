@@ -67,6 +67,7 @@ function ready() {
       addToCart.innerText = "Add to Cart";
       addToCart.addEventListener("click", function() {
         GourmetBurgers.cart.addToOrder(menuID);
+        updateTotal();
       });
       footer.appendChild(addToCart);
     }
@@ -183,4 +184,6 @@ function ready() {
       filter: elem => menu[elem.menuID].name.toLowerCase().indexOf(needle) > -1
     });
   });
+
+  updateTotal();
 }
