@@ -73,11 +73,11 @@ class Ingredient(IngredientBase):
 
         query = self._db.fetchOne(
             self._SQL.INVENTORY.GET_STATUS, (inventoryID,))
-        self._is_available = query[0]
+        self._is_available = bool(query[0])
 
     @property
     def available(self):
-        return self._is_available
+        return self._quantity and self._is_available
 
     @available.setter
     def available(self, state):
@@ -96,7 +96,7 @@ class Ingredient(IngredientBase):
             self._db.update(self._SQL.INVENTORY.DECREMENT_INVENTORY, (change, self._id))
         else:
             self._quantity = change
-            self._is_available = True if change > 0 else False
+            self._is_available = change > 0
             self._db.update(self._SQL.INVENTORY.SET_INVENTORY, (change, self._id))
 
     # Check if there is the available stock is 30% or less than the maximum stock

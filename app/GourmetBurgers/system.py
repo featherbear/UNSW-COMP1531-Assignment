@@ -14,6 +14,7 @@ class GBSystem:
         for value in SQL.TableQueries.values():
             self._db.create_table(value)
 
+    """ Ingredients / Inventory """
     # Get all ingredients
     @property
     def inventory(self):
@@ -27,6 +28,16 @@ class GBSystem:
             inventory[item.id] = item
         return inventory
 
+    def getIngredient(self, ingredientID):
+        return models.Ingredient(ingredientID)
+
+    def updateIngredientAvailability(self, ingredientID, status):
+        self.getIngredient(ingredientID).available = status
+
+    def updateIngredientStock(self, ingredientID, change):
+        self.getIngredient(ingredientID).updateStock(change)
+
+    """ Menu """
     # Get all menu items
     @property
     def menu(self):
@@ -40,6 +51,10 @@ class GBSystem:
             menu[item.id] = item
         return menu
 
+    def getMenuItem(self, menuID):
+        return models.MenuItem(menuID)
+
+    """ Categories """
     # Get category name mapping dictionary
     @property
     def categories(self):
@@ -51,7 +66,9 @@ class GBSystem:
 
         return data
 
+    """ Orders """
     # Get all past orders
+
     def getOrders(self, fetchAll=False):
         if fetchAll:
             query = self._db.fetchAll(SQL.ORDERS.GET_ALL_ORDERS)
@@ -66,7 +83,7 @@ class GBSystem:
         return models.Order(orderID)
 
     # Create an order
-    def createOrder(self, orderData):
+    def createOrder(self, orderData: list):
         """
         # orderData structure
         [
@@ -81,7 +98,12 @@ class GBSystem:
         ]
 
         """
+        if type(orderData) is not list:
+            raise models.IntegrityError("Bad input data")
 
+        if len(orderData) == 0:
+            raise models.IntegrityError("No order items")
+                    
         _inventoryMap = self.getInventoryMap()
         _menuMap = self.getMenuMap()
 
@@ -152,7 +174,8 @@ class GBSystem:
                 _inventoryLevels[int(ingredientID)
                                  ] -= ingredients[ingredientID] * quantity
                 if _inventoryLevels[int(ingredientID)] < 0:
-                    raise models.OutOfStockError(f"Not enough stock for ingredient {ingredientID}")
+                    raise models.OutOfStockError(
+                        f"Not enough stock for ingredient {ingredientID}")
 
         """
         TRANSACTION
