@@ -3,8 +3,8 @@ from flask import Flask
 import routes
 
 # Create Flask instance
-app = Flask(__name__, template_folder='../site/templates',
-            static_folder='../site/assets', static_url_path='/assets')
+app = Flask(__name__, template_folder='./site/templates',
+            static_folder='./site/assets', static_url_path='/assets')
 
 # Initialise GBSystem, and bind it to Flask
 app.GB = GBSystem()

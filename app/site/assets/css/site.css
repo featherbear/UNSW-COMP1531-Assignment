@@ -120,6 +120,17 @@ footer .greybox {
   margin: 10px auto;
   background-color: rgba(0, 0, 0, 0.4);
 }
+footer .greybox .staff {
+  float: left;
+  margin-left: 5px;
+}
+footer .greybox .staff a,
+footer .greybox .staff a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+
 footer ul {
   margin: 0;
 }
@@ -130,4 +141,24 @@ footer ul li {
 #content {
   margin-top: 10px;
   width: 100%;
+}
+
+.cart {
+  display: none;
+  float: right;
+  color: black;
+  padding: 10px;
+  padding-top: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-color: #fed676;
+  transition: padding-top 0.3s ease;
+}
+
+.cart:hover {
+  padding-top: 15px;
+}
+
+.cart.active {
+  display: initial;
 }

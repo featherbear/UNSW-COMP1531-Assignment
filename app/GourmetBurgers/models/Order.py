@@ -25,9 +25,9 @@ class Order(SQLBase):
             # Update price
             self._price += price * quantity
 
-        # Validation
-        total = self._db.fetchOne(self._SQL.ORDERS.ORDER_TOTAL, (orderID,))[0]
-        assert total == self._price
+        # Validate price
+        # total = self._db.fetchOne(self._SQL.ORDERS.ORDER_TOTAL, (orderID,))[0]
+        # assert total == self._price
 
     @property
     def id(self):
@@ -49,10 +49,10 @@ class Order(SQLBase):
     def items(self):
         return self._items
 
+    # Complete the order
     def completeOrder(self):
         self._status = True
         self._db.update(self._SQL.ORDERS.COMPLETE_ORDER, (self.id,))
-        
 
     # Serialise object into a dict
     def toDict(self):

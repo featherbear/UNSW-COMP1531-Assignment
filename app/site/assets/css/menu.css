@@ -1,3 +1,7 @@
+html {
+  overflow-y: scroll;
+}
+
 /* Search Bar */
 .search {
   width: 100%;
@@ -25,6 +29,7 @@
   border-top: 1px solid grey;
   list-style: none;
   padding: 0;
+  padding-left: 5px;
   background-color: #fdf6f0;
 }
 
@@ -58,52 +63,110 @@
   padding-top: 100%;
 }
 
+/* Menu Item */
 .menu-item {
-  cursor: pointer;
-  background-color: #fdf6f0;
+  background-color: rgba(253, 246, 240, 0.96);
 
   flex: 1;
+
+  padding: 5px;
 
   border-radius: 6px;
   margin-bottom: 3px;
   margin-left: 3px;
 
+  transition: background-color 0.5s;
+
   /* Fix positioning for Firefox !?!?!? */
   filter: grayscale(0%);
 }
 
-.menu-item .price {
+.menu-item:hover {
+  background-color: rgba(253, 246, 240, 1);
+}
+
+.menu-item .header .name {
+  font-weight: bold;
+}
+
+.menu-item .header .price {
   position: absolute;
   top: 0;
   right: 0;
+  padding: 5px;
+  border-bottom-left-radius: 10px;
+
+  background-color: #fed676;
 }
-.menu-item .price:before {
+.menu-item .header .price:before {
   content: "$";
 }
 
-.menu-item .add {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-
-  opacity: 0.5;
-  transition: opacity 0.5s;
+/* Content */
+.menu-item .content {
+  margin-top: 5px;
+}
+.menu-item .content .description {
+  color: #535050;
 }
 
-.menu-item .add:hover {
+/* Footer */
+.menu-item .footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+
+  cursor: pointer;
+
+  color: white;
+
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.menu-item:hover .footer {
   opacity: 1;
 }
 
+.menu-item .footer * {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  padding-right: 5px;
+
+  transition: background-color 0.5s;
+}
+
+.menu-item .footer :first-child {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.menu-item .footer :last-child {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.menu-item .footer .add {
+  background-color: #f6b75f;
+}
+.menu-item .footer .add:hover {
+  background-color: orange;
+}
+
+.menu-item .footer .customise {
+  background-color: #f3aba3;
+}
+.menu-item .footer .customise:hover {
+  background-color: #df3e32;
+}
+
 .menu-item.disabled {
-  background-color: grey;
+  background-color: rgba(253, 246, 240, 0.8);
   cursor: default;
   pointer-events: none;
 
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
-}
-
-.menu-item.disabled .add,
-.menu-item.disabled .customise {
-  display: none;
 }
