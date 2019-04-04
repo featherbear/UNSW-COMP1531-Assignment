@@ -10,7 +10,7 @@ function ready() {
   let menuCategories = [];
   let menuCategoriesMap = {};
 
-  // Element creators
+  /* Element creators */
 
   function createMenuElem(menuID) {
     let item = menu[menuID];
@@ -23,6 +23,7 @@ function ready() {
     elem.classList.add("menu-item");
 
     //
+
     let header = document.createElement("div");
     header.classList.add("header");
 
@@ -31,6 +32,7 @@ function ready() {
 
     let footer = document.createElement("div");
     footer.classList.add("footer");
+
     //
 
     let name = document.createElement("div");
@@ -49,6 +51,7 @@ function ready() {
     content.appendChild(desc);
 
     // Disable item if not available
+
     if (!item.available) {
       elem.classList.add("disabled");
     } else {
@@ -59,6 +62,7 @@ function ready() {
         cust.addEventListener("click", function() {
           // TODO: Add customise
         });
+
         footer.appendChild(cust);
       }
 
@@ -66,9 +70,14 @@ function ready() {
       addToCart.classList.add("add");
       addToCart.innerText = "Add to Cart";
       addToCart.addEventListener("click", function() {
-        GourmetBurgers.cart.addToOrder(menuID);
+        try {
+          GourmetBurgers.cart.addToOrder(menuID);
+        } catch (err) {
+          alert(err);
+        }
         updateTotal();
       });
+
       footer.appendChild(addToCart);
     }
 
