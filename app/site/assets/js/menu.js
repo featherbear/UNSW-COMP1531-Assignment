@@ -197,6 +197,7 @@ function ready() {
     iso.arrange({
       filter: elem => menu[elem.menuID].name.toLowerCase().indexOf(needle) > -1
     });
+    document.querySelector('.no-items').classList.toggle("active", iso.filteredItems.length == 0);
   });
 
   updateTotal();
