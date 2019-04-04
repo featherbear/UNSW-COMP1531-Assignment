@@ -80,28 +80,6 @@ function ready() {
     return container;
   }
 
-  // Return a filter function for Isotope
-  const getFilterFunction = categoryID => elem =>
-    menu[elem.menuID].categories.hasOwnProperty(0) &&
-    menu[elem.menuID].categories[0].indexOf(categoryID) > -1;
-
-  // Select category
-  function selectCategory(categoryID, fromSearch) {
-    if (currentCategory != categoryID) {
-      menuCategoriesMap[currentCategory].classList.remove("active");
-
-      menuCategoriesMap[categoryID].classList.add("active");
-      iso.arrange({
-        filter: categoryID ? getFilterFunction(categoryID) : ""
-      });
-      currentCategory = categoryID;
-
-      if (!fromSearch) {
-        document.querySelector(".search .search-bar").value = "";
-      }
-    }
-  }
-
   // Create category list element
   function createCategoryElem(categoryID) {
     let elem = document.createElement("li");
@@ -113,8 +91,35 @@ function ready() {
     return elem;
   }
 
-  //
+  // Return a filter function for Isotope
+  // Filter selects menuItems which have a certain categoryID in level 0 
+  const getFilterFunction = categoryID => elem =>
+    menu[elem.menuID].categories.hasOwnProperty(0) &&
+    menu[elem.menuID].categories[0].indexOf(categoryID) > -1;
 
+  // Select category
+  function selectCategory(categoryID, fromSearch) {
+    if (currentCategory != categoryID) {
+      // Toggle UI
+      menuCategoriesMap[currentCategory].classList.remove("active");
+      menuCategoriesMap[categoryID].classList.add("active");
+      
+      // Filter menuItems via Isotope
+      iso.arrange({
+        filter: categoryID ? getFilterFunction(categoryID) : ""
+      });
+      currentCategory = categoryID;
+
+      // Reset the search bar query if the function was not called via a search
+      if (!fromSearch) {
+        document.querySelector(".search .search-bar").value = "";
+      }
+    }
+  }
+
+  // RUN
+
+  // Add menuItems into the DOM
   Object.values(menu)
     .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase())
     .forEach(menuItem => {
@@ -144,7 +149,7 @@ function ready() {
     menuCategoriesMap[undefined] = elem;
     categoryMenu.appendChild(elem);
 
-    // Add other categories
+    // Add other categories into DOM
     menuCategories.forEach(categoryID => {
       let elem = createCategoryElem(categoryID);
       menuCategoriesMap[categoryID] = elem;
