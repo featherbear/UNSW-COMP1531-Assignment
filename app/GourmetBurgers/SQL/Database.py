@@ -24,8 +24,7 @@ class Database():
         c = self._conn.cursor()
         c.execute(create_table_sql)
 
-    # SQL SELECT  [0]
-
+    # SQL SELECT [0]
     def fetchOne(self, *args, **kwargs):
         c = self._conn.cursor()
         c.execute(*args)
