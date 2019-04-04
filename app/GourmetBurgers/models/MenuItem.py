@@ -57,7 +57,7 @@ class MenuItem(MenuItemBase):
         # Add default ingredients
         for item in self._db.fetchAll(self._SQL.MENU.GET_MAIN_COMPONENTS, (menuID,)):
             component = MenuIngredient(*item)
-            self._components.append(component)
+            self._components.append(componentssss)
 
     @property
     def can_customise(self):
