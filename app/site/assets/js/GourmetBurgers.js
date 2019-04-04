@@ -138,7 +138,7 @@ let GourmetBurgers;
           if (
             self._inventory[componentID].quantity < componentUsage[componentID]
           ) {
-            throw Error("Out of stock");
+            throw Error("Your order uses too many ingredients which we don't have enough of :'(");
           }
         }
 
