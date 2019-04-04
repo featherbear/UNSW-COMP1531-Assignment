@@ -39,7 +39,7 @@ def test_ingredient_property(sys):
     assert ingredient.available == False
 
 #check if the exception raised when try to get a non exist ingredient
-def test_getNoneIngredient(sys):
+def test_getNoneExistIngredient(sys):
     with pytest.raises(NoItemError):
         sys.getIngredient(None)
 
