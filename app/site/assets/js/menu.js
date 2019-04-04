@@ -114,7 +114,7 @@ function ready() {
       menuCategoriesMap[categoryID].classList.add("active");
       
       // Filter menuItems via Isotope
-      iso.arrange({
+      _iso_arrange({
         filter: categoryID ? getFilterFunction(categoryID) : ""
       });
       currentCategory = categoryID;
@@ -187,18 +187,23 @@ function ready() {
   document
     .querySelector(".search select")
     .addEventListener("change", function() {
-      iso.arrange({ sortBy: this.value });
+      _iso_arrange({ sortBy: this.value });
     });
 
   // Handle searching
   document.querySelector(".search input").addEventListener("input", function() {
     selectCategory(undefined, true);
     let needle = this.value.toLowerCase();
-    iso.arrange({
+    _iso_arrange({
       filter: elem => menu[elem.menuID].name.toLowerCase().indexOf(needle) > -1
     });
-    document.querySelector('.no-items').classList.toggle("active", iso.filteredItems.length == 0);
+    
   });
+
+  function _iso_arrange(data) {
+    iso.arrange(data);
+    document.querySelector('.no-items').classList.toggle("active", iso.filteredItems.length == 0);
+  }
 
   updateTotal();
 }
