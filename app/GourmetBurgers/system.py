@@ -83,7 +83,7 @@ class GBSystem:
         return models.Order(orderID)
 
     # Create an order
-    def createOrder(self, orderData):
+    def createOrder(self, orderData: list):
         """
         # orderData structure
         [
@@ -98,7 +98,12 @@ class GBSystem:
         ]
 
         """
+        if type(orderData) is not list:
+            raise models.IntegrityError("Bad input data")
 
+        if len(orderData) == 0:
+            raise models.IntegrityError("No order items")
+                    
         _inventoryMap = self.getInventoryMap()
         _menuMap = self.getMenuMap()
 
