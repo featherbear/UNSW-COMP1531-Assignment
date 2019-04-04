@@ -1,5 +1,10 @@
+/*
+  GourmetBurgers system object
+*/
+
 let GourmetBurgers;
 (async () => {
+  // JSON Fetch Promise
   const fetchGET = async url =>
     fetch(url)
       .then(resp => resp.json())
@@ -7,8 +12,11 @@ let GourmetBurgers;
         if (res.status) return res.data;
       });
 
+  // Self-reference
   let self;
+
   GourmetBurgers = {
+    // Get system data
     _menu: await fetchGET("/data/menu.json"),
     _categories: await fetchGET("/data/categories.json"),
     _inventory: await fetchGET("/data/inventory.json"),
@@ -31,18 +39,19 @@ let GourmetBurgers;
     cart: {
       calculate: () => {
         let sum = 0;
+
         for (let item of self.cart._data) {
-          console.log("Looking at", item);
+          // If the item is not a custom item, then add the base price
           if (!item.custom) {
             sum += self._menu[item.id].price * item.qty;
             continue;
           }
 
+          // Structure check
           if (typeof item.items !== "object") throw Error("Bad item.items");
 
-          // Custom items
+          // For custom items, calculate the ingredient delta
           let delta = {};
-
           let defaults = self._menu[item.id].components;
           for (let ingredient of defaults) {
             delta[ingredient.id] =
@@ -50,9 +59,8 @@ let GourmetBurgers;
           }
 
           let customPrice = 0;
-
+          // For added ingredients, add the price of each ingredient
           for (let id in delta) {
-            //Only consider additional items
             if (delta[id] > 0) {
               customPrice += self._inventory[id].price * quantity;
             }
@@ -92,15 +100,47 @@ let GourmetBurgers;
       addToOrder: function(id, data) {
         self.cart.__addToOrder(id, data);
         self.cart._updateOrder();
-        console.log(self.cart.calculate());
       },
+
       __addToOrder: function(id, data) {
         // Validate `id` and `data`
         if (!(id in self._menu)) throw Error(`Invalid id ${id}`);
         if (data && !self._menu[id].can_customise)
           throw Error(`Cannot customise id ${id}`);
 
-        // TODO: Check if there are enough ingredients
+        // Check if there are enough ingredients
+        let componentUsage = {};
+
+        // Calculate component usage of current items
+        for (let orderItem of self.cart._data) {
+          let components = orderItem.custom
+            ? orderItem.items
+            : self._menu[orderItem.id].components;
+          for (let component of Object.values(components)) {
+            componentUsage[component.id] =
+              ((componentUsage[component.id] || 0) + component.quantity) *
+              orderItem.qty;
+          }
+        }
+
+        // Add the component usage for the current item
+        components = data ? data : self._menu[id].components;
+        for (let component of Object.values(components)) {
+          componentUsage[component.id] =
+            (componentUsage[component.id] || 0) + component.quantity;
+        }
+
+        // Check that there is enough stock for the component usage
+        for (let componentID in componentUsage) {
+          if (!(componentID in self._inventory)) {
+            throw Error(`No ingredient ${componentID} found`);
+          }
+          if (
+            self._inventory[componentID].quantity < componentUsage[componentID]
+          ) {
+            throw Error("Out of stock");
+          }
+        }
 
         // Check if the menu item has been added before, if so increase the quantity
         for (let item of self.cart._data) {
