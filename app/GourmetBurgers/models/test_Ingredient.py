@@ -31,12 +31,21 @@ def test_ingredient_ID(sys):
 
 #check if the property of ingredient is right
 def test_ingredient_property(sys):
+    #test case 1
     ingredient = sys.getIngredient(3)
     assert ingredient.name == "InventoryThree"
     assert ingredient.price == 3
     assert ingredient.quantity == 3
     assert ingredient.quantity_max == 80
     assert ingredient.available == False
+
+    #test case 2
+    ingredient2 = sys.getIngredient(1)
+    assert ingredient2.name == "InventoryOne"
+    assert ingredient2.price == 1
+    assert ingredient2.quantity == 1
+    assert ingredient2.quantity_max == 30
+    assert ingredient2.available == True
 
 #check if the exception raised when try to get a non exist ingredient
 def test_getNoneExistIngredient(sys):
