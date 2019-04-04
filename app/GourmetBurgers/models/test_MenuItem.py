@@ -47,10 +47,17 @@ def test_item(sys):
 	assert a._description == "MenuTwo"
 	assert b._description == "MenuThree"
 	assert c._description == "MenuFour"
+
+def test_attributes(sys):
+	a = MenuItem(2)
+	b = MenuItem(3)
+	c = MenuItem(4)
 	assert a._price == 2
 	assert b._price == 3
+	assert c._price == 4
 	assert a._id == 2
 	assert b._id == 3
+	assert c._id == 4
 
 
 def test_can_custom(sys):
