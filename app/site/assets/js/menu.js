@@ -10,7 +10,7 @@ function ready() {
   let menuCategories = [];
   let menuCategoriesMap = {};
 
-  // Element creators
+  /* Element creators */
 
   function createMenuElem(menuID) {
     let item = menu[menuID];
@@ -23,6 +23,7 @@ function ready() {
     elem.classList.add("menu-item");
 
     //
+
     let header = document.createElement("div");
     header.classList.add("header");
 
@@ -31,6 +32,7 @@ function ready() {
 
     let footer = document.createElement("div");
     footer.classList.add("footer");
+
     //
 
     let name = document.createElement("div");
@@ -49,6 +51,7 @@ function ready() {
     content.appendChild(desc);
 
     // Disable item if not available
+
     if (!item.available) {
       elem.classList.add("disabled");
     } else {
@@ -59,6 +62,7 @@ function ready() {
         cust.addEventListener("click", function() {
           // TODO: Add customise
         });
+
         footer.appendChild(cust);
       }
 
@@ -66,9 +70,14 @@ function ready() {
       addToCart.classList.add("add");
       addToCart.innerText = "Add to Cart";
       addToCart.addEventListener("click", function() {
-        GourmetBurgers.cart.addToOrder(menuID);
+        try {
+          GourmetBurgers.cart.addToOrder(menuID);
+        } catch (err) {
+          alert(err);
+        }
         updateTotal();
       });
+
       footer.appendChild(addToCart);
     }
 
@@ -78,28 +87,6 @@ function ready() {
     container.appendChild(elem);
 
     return container;
-  }
-
-  // Return a filter function for Isotope
-  const getFilterFunction = categoryID => elem =>
-    menu[elem.menuID].categories.hasOwnProperty(0) &&
-    menu[elem.menuID].categories[0].indexOf(categoryID) > -1;
-
-  // Select category
-  function selectCategory(categoryID, fromSearch) {
-    if (currentCategory != categoryID) {
-      menuCategoriesMap[currentCategory].classList.remove("active");
-
-      menuCategoriesMap[categoryID].classList.add("active");
-      iso.arrange({
-        filter: categoryID ? getFilterFunction(categoryID) : ""
-      });
-      currentCategory = categoryID;
-
-      if (!fromSearch) {
-        document.querySelector(".search .search-bar").value = "";
-      }
-    }
   }
 
   // Create category list element
@@ -113,8 +100,35 @@ function ready() {
     return elem;
   }
 
-  //
+  // Return a filter function for Isotope
+  // Filter selects menuItems which have a certain categoryID in level 0 
+  const getFilterFunction = categoryID => elem =>
+    menu[elem.menuID].categories.hasOwnProperty(0) &&
+    menu[elem.menuID].categories[0].indexOf(categoryID) > -1;
 
+  // Select category
+  function selectCategory(categoryID, fromSearch) {
+    if (currentCategory != categoryID) {
+      // Toggle UI
+      menuCategoriesMap[currentCategory].classList.remove("active");
+      menuCategoriesMap[categoryID].classList.add("active");
+      
+      // Filter menuItems via Isotope
+      iso.arrange({
+        filter: categoryID ? getFilterFunction(categoryID) : ""
+      });
+      currentCategory = categoryID;
+
+      // Reset the search bar query if the function was not called via a search
+      if (!fromSearch) {
+        document.querySelector(".search .search-bar").value = "";
+      }
+    }
+  }
+
+  // RUN
+
+  // Add menuItems into the DOM
   Object.values(menu)
     .sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase())
     .forEach(menuItem => {
@@ -144,7 +158,7 @@ function ready() {
     menuCategoriesMap[undefined] = elem;
     categoryMenu.appendChild(elem);
 
-    // Add other categories
+    // Add other categories into DOM
     menuCategories.forEach(categoryID => {
       let elem = createCategoryElem(categoryID);
       menuCategoriesMap[categoryID] = elem;

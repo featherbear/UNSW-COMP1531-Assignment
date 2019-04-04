@@ -98,14 +98,14 @@ class MenuItem(MenuItemBase):
 
     # Serialise object into a dict
     def toDict(self):
-        components = []
+        components = {}
 
         for item in self._components:
-            components.append(dict(
+            components[item.id] = dict(
                 id=item.id,
                 quantity=item.quantity,
                 quantity_max=item.quantity_max
-            ))
+            )
 
         return dict(
             id=self._id,
