@@ -1,12 +1,14 @@
 import pytest
 
-from .MenuItem import HistoricalMenuItem
-from .models import Exceptionsa
+# from GourmetBurgers import system
+from ..system import GBSystem
+from .MenuItem import *
+from .Exceptions import NoItemError
 import sqlite3
 
 @pytest.fixture
 def sys():
-    with sqlite3.connect(db) as _db:
+    with sqlite3.connect("../test_db.sqlite3") as _db:
         queries = list(_db.iterdump())
     sys = GBSystem(':memory:')
     for line in queries:
@@ -56,9 +58,9 @@ def test_can_custom(sys):
 	item_b = MenuItem(2)
 	item_c = MenuItem(5)
 
-	assert item_a.can_custome == True
-	assert item_b.can_custome == False
-	assert item_c.can_custome == True
+	assert item_a.can_customise == True
+	assert item_b.can_customise == False
+	assert item_c.can_customise == True
 
 # def test_component_usage(sys):
 # 	item_a = MenuItem(1)
@@ -72,17 +74,19 @@ def test_available(sys):
 	item_c = MenuItem(3)
 	item_d = MenuItem(4)
 	item_e = MenuItem(5)
+	# m = MenuItem(6)
 
-	assert item_a.available == True
+	# ID is available but there are not enough ingredients
+	assert item_a.available == False
 	assert item_b.available == False
 	assert item_c.available == True
 	assert item_d.available == True
 	assert item_e.available == True
 
 
-def item_not_found_error(sys):
-	with pytest.raises(Exceptions.NoItemError):
-		c = MenuItem(6)
+def test_item_not_found_error(sys):
+	with pytest.raises(NoItemError):
+		m = MenuItem(6)
 
 # def test_usage()
 
