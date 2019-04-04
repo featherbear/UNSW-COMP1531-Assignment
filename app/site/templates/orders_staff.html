@@ -20,9 +20,9 @@
 					<th>Orders ID</th><th>Order Details</th><th>Order Status</th><th>Change Status</th>		
 					{% for order in orders %}
 						<tr>
-							<td align="center">order.id</td>
+							<td align="center">order._id</td>
 							{% for menuItem in order._items %}
-							<td align="center">menuItem._name</td>
+								<td align="center">menuItem._name</td>
 							{% endfor %}
 							<td align="center">order._status</td>
 							<td align="center">
