@@ -6,13 +6,18 @@ site = Blueprint(__name__, __name__)
 
 @site.route('/staff/orders/')
 def view_staffOrder():
-    return render_template('orders_staff.html', orders = app.GB.getOrders())
+    return render_template('orders_staff.html', orders = list(list(app.GB.getOrders()))*2)
 
 
-@site.route('/staff/orders/update/<orderID>', methods=['POST'])
+@site.route('/staff/orders/update', methods=['POST'])
 def update_order():
-    pass
+    return "UPDATED: " + str(request.form['orderID'])
 
+
+    order = app.GB.getOrder(orderID)
+    order.completeOrder()
+
+    pass
 
 # @site.route('/staff/orders.json')
 # def get_customerOrder():

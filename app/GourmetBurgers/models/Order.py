@@ -65,3 +65,9 @@ class Order(SQLBase):
             price=self._price,
             items=[menuItem.toDict() for menuItem in self._items]
         )
+
+    # def __str__(self):
+    #     return ""
+
+
+

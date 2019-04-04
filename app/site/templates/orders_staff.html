@@ -1,49 +1,53 @@
-{% extends "_site.html" %}
-
-{% set title = "Orders Overview" %}
-
-{% block head %}
+{% extends "_site.html" %} {% set title = "Orders Overview" %} {% block head %}
 <!-- <head>Orders Staff</head> -->
 <!-- this is in the head -->
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <!-- this in the content -->
 </br>
 
 <body>
-	{{ orders }}
-	<table width="100%" align="center" >
-		<tr>
-			<td>
-				<table width="100%" border="1" style="width: 800px; height: 80px" align="center">
-					<th>Orders ID</th><th>Order Details</th><th>Order Status</th><th>Change Status</th>		
-					{% for order in orders %}
-						<tr>
-							<td align="center">order._id</td>
-							{% for menuItem in order._items %}
-								<td align="center">menuItem._name</td>
-							{% endfor %}
-							<td align="center">order._status</td>
-							<td align="center">
-								<!-- <input type = "button" value = "Cooked"> -->
-								<button onclick="changeStatus()">Cooked</button>
-								<p id="status"></p>
-							</td>
+    {{ orders }}
+    <table width="100%" align="center">
+        <tr>
+            <td>
+                <table width="100%" border="1" style="width: 800px; height: 80px" align="center">
+                    <tr>
+                        <th>Orders ID</th>
+                        <th>Order Details</th>
+                        <th>Change Status</th>
+                    </tr>
 
-							<script>
-								function changeStatus(){
-									// order._status = 
-									document.getElementById("status").innerHTML = "Status Changed!";
-								}
-							</script>
+                    {% for order in orders %}
+                    <tr>
+                        <td align="center">{{order.id}}</td>
+                        <td>{% for menuItem in order.items %}{{menuItem.name}} AAAA {% endfor %}</td>
+                        <td align="center">
+                            <form method="POST" action="/staff/orders/update">
+                                <input type="hidden" name="orderID" value="{{order.id}}">
+                                <button type="submit">Cooked!</button>
+                            </form>
+<!--
+------
 
-						</tr>
-					{% endfor %}
-				</table>
-			</td> 
-		</tr>
-	</table>
+MenuItemOne
+* 5 tomatos
+* 3 buns
+MenuItemTwo
+* 3
+
+------
+
+
+-->
+                            <!-- <p id="status"></p> -->
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 
 {% endblock %}

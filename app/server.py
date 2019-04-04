@@ -7,7 +7,7 @@ app = Flask(__name__, template_folder='./site/templates',
             static_folder='./site/assets', static_url_path='/assets')
 
 # Initialise GBSystem, and bind it to Flask
-app.GB = GBSystem()
+app.GB = GBSystem("GourmetBurgers/test_db.sqlite3")
 
 # Register routes
 for module in routes.__modules:
