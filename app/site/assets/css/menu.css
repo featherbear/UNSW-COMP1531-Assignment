@@ -42,6 +42,23 @@ html {
   font-weight: bold;
 }
 
+.no-items::before {
+  content: "No items found";
+}
+.no-items {
+  display: none;
+  width: calc(80% - 3px);
+  float: right;
+  text-align: center;
+  background-color: rgba(253, 246, 240, 0.96);
+  border-radius: 6px;
+  padding: 30px 0;
+}
+
+.no-items.active {
+  display: inherit;
+}
+
 /* Menu Grid */
 #menu-grid {
   display: inline-flex;

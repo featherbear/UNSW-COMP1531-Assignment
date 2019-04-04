@@ -133,6 +133,7 @@ class HistoricalMenuItem(MenuItemBase):
             menuID = menuID[0]
 
         super().__init__(menuID)
+
         self._quantity = quantity
         self._price = price
 
@@ -155,6 +156,10 @@ class HistoricalMenuItem(MenuItemBase):
     def is_custom(self):
         return self._is_custom
 
+    @property
+    def quantity(self):
+        return self._quantity
+    
     # Serialise object into dict
     def toDict(self):
         components = {}

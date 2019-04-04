@@ -19,8 +19,10 @@ class Order(SQLBase):
         # Add food items of the order
         for foodItem in self._db.fetchAll(self._SQL.ORDERS.ORDER_ITEMS_0, (orderID,)):
             is_custom, customID, menuID, quantity, price = foodItem
+            # TODO: BUG? quantiy -- price
+            print("Fetch:", customID, menuID, quantity, price)
             self._items.append(HistoricalMenuItem(
-                customID if is_custom else menuID, is_custom, quantity, price))
+                customID if is_custom else menuID, is_custom, price, quantity))
 
             # Update price
             self._price += price * quantity
