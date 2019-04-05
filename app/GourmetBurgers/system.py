@@ -37,6 +37,9 @@ class GBSystem:
     def updateIngredientStock(self, ingredientID, change):
         self.getIngredient(ingredientID).updateStock(change)
 
+    def updateMenuAvailability(self, menuID, status):
+        self.getMenuItem(menuID).available = status
+
     """ Menu """
     # Get all menu items
     @property
@@ -68,7 +71,6 @@ class GBSystem:
 
     """ Orders """
     # Get all past orders
-
     def getOrders(self, fetchAll=False):
         if fetchAll:
             query = self._db.fetchAll(SQL.ORDERS.GET_ALL_ORDERS)
@@ -103,7 +105,7 @@ class GBSystem:
 
         if len(orderData) == 0:
             raise models.IntegrityError("No order items")
-                    
+
         _inventoryMap = self.getInventoryMap()
         _menuMap = self.getMenuMap()
 
@@ -137,7 +139,8 @@ class GBSystem:
             if not _menuMap[menuID].available:
                 raise models.OutOfStockError(menuID)
 
-            mainIngredients = _menuMap[menuID].getComponentUsage()
+            defaultIngredients = _menuMap[menuID].getComponentUsage()
+            
             # Check validity for custom items
             if custom:
                 # Check if it is customisable
@@ -146,21 +149,27 @@ class GBSystem:
                         f"Menu item {menuID} not customisable")
 
                 # Check that there are ingredients
-                if len(ingredients) is 0:
+                if len(ingredients) == 0 or sum(list(ingredients.values())) == 0:
                     raise models.IntegrityError(
                         "No ingredients in custom order item")
 
                 # Calculate menu delta
                 delta = {}
-                for id, qty in mainIngredients.items():
+
+                for id in ingredients.keys():
+                    if id not in defaultIngredients:
+                        raise models.IntegrityError(f"Ingredient {id} is not part of menu item {menuID}")
+
+                for id, qty in defaultIngredients.items():
                     delta[id] = ingredients.get(id, 0) - qty
 
                 for id, quantity in delta.items():
                     # Only consider additional items
                     if quantity > 0:
                         price += models.Ingredient(id).price * quantity
+                
             else:
-                ingredients = mainIngredients
+                ingredients = defaultIngredients
 
             price += _menuMap[menuID].price
 
@@ -203,7 +212,6 @@ class GBSystem:
             if custom:
                 customID = self._db.insert(
                     SQL.ORDERS.CREATE_CUSTOM_MAIN, (menuID,))
-                print(f"Created custom {customID}")
                 for ingredientID in ingredients:
                     self._db.insert(SQL.ORDERS.CREATE_LINK_CUSTOM_MAINS,
                                     (customID, ingredientID, ingredients[ingredientID]))
@@ -213,7 +221,6 @@ class GBSystem:
                 self._db.insert(SQL.ORDERS.CREATE_LINK_ORDER,
                                 (orderID, menuID, quantity, price))
 
-        print(f"Order {orderID} created at {ts}")
         return models.Order(orderID)
 
         """
