@@ -13,7 +13,6 @@ def view_staffOrder():
 def update_order():
     return "UPDATED: " + str(request.form['orderID'])
 
-
     order = app.GB.getOrder(orderID)
     order.completeOrder()
 
