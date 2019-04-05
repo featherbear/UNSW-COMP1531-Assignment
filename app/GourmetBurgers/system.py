@@ -163,11 +163,10 @@ class GBSystem:
                 for id, qty in defaultIngredients.items():
                     delta[id] = ingredients.get(id, 0) - qty
 
-                for id, quantity in delta.items():
+                for id, qty in delta.items():
                     # Only consider additional items
-                    if quantity > 0:
-                        price += models.Ingredient(id).price * quantity
-                
+                    if qty > 0:
+                        price += models.Ingredient(id).price * qty
             else:
                 ingredients = defaultIngredients
 
@@ -180,8 +179,9 @@ class GBSystem:
                     raise models.NoItemError(ingredientID)
 
                 # Check there is enough stock for all orders
-                _inventoryLevels[int(ingredientID)
-                                 ] -= ingredients[ingredientID] * quantity
+                ingredientID = int(ingredientID)
+                _inventoryLevels[ingredientID] -= ingredients[ingredientID] * quantity
+                
                 if _inventoryLevels[int(ingredientID)] < 0:
                     raise models.OutOfStockError(
                         f"Not enough stock for ingredient {ingredientID}")

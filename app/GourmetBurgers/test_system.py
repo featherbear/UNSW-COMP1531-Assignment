@@ -270,6 +270,32 @@ def test_createOrder_client_error(sys):
         ])
 
 
-def client_test(sys):
-    # TODO: Client test
-    pass
+def test_client(sys):
+    """ Create first order """
+    # Check menu ID 3
+    menuItem = list(sys.menu)[3-1]
+    assert menuItem.available == True
+
+    # Create the order
+    orderData = [dict(id=menuItem.id)]
+    order = sys.createOrder(orderData)
+
+    assert order.id == 3
+    assert order.price == 3
+    assert order.status == False
+    order.completeOrder()
+    assert order.status == True
+
+    """ Create second order, with extra items """
+    # Check menu ID 5
+    menuItem = list(sys.menu)[4]
+    assert menuItem.available == True
+
+    # Create the order
+    orderData = [dict(id=menuItem.id, custom=True, items={5: 15})]
+    order = sys.createOrder(orderData)
+    assert order.id == 4
+    assert order.price == 5 + 10 * 5 # Base price + 10x ID 5
+    assert order.status == False
+    order.completeOrder()
+    assert order.status == True

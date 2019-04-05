@@ -56,10 +56,10 @@ def test_updateAvailability(sys):
 
 
 def test_updateStock_decrement(sys):
-    assert Ingredient(5).quantity == 5
+    assert Ingredient(5).quantity == 21
     assert Ingredient(5).available == True
 
-    Ingredient(5).updateStock(-5)
+    Ingredient(5).updateStock(-21)
     assert Ingredient(5).quantity == 0
     assert Ingredient(5).available == False
 
@@ -68,13 +68,14 @@ def test_updateStock_increment(sys):
     assert Ingredient(4).quantity == 0
     assert Ingredient(4).available == False
 
-    Ingredient(5).updateStock(10)
-    assert Ingredient(5).quantity == 10
-    assert Ingredient(5).available == True
+    Ingredient(4).updateStock(10)
+    assert Ingredient(4).quantity == 10
+    print(Ingredient(4).available)
+    assert Ingredient(4).available == True
 
 
 def test_updateStock_set(sys):
-    assert Ingredient(5).quantity == 5
+    assert Ingredient(5).quantity == 21
     assert Ingredient(5).available == True
 
     Ingredient(5).updateStock(25)

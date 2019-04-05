@@ -11,7 +11,7 @@ def __init__():
             __modules[pyfile] = importlib.import_module(fp)
             print(f"Loaded module `{pyfile}`")
         except Exception as e:
-            print("Error routing " + pyfile + " - " + str(e))
+            print(f"Error routing {pyfile} - {e}")
     return __modules
 
 
