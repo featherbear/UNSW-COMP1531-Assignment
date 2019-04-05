@@ -1,16 +1,15 @@
 import pytest
 
-# from GourmetBurgers import system
-from ..system import GBSystem
-from .Order import *
-from .Exceptions import NoItemError
+import os
 import sqlite3
+from ..system import GBSystem
+from . import *
+
 
 @pytest.fixture
 def sys():
-    with sqlite3.connect("../test_db.sqlite3") as _db:
+    with sqlite3.connect(os.path.dirname(os.path.realpath(__file__)) + "/../test_db.sqlite3") as _db:
         queries = list(_db.iterdump())
-        [print(line) for line in queries]
     sys = GBSystem(':memory:')
     for line in queries:
         try:
@@ -21,61 +20,60 @@ def sys():
 
 
 def test_orders_id(sys):
-	a = Order(1)
-	b = Order(2)
+    a = Order(1)
+    b = Order(2)
 
-	assert a._id == 1
-	assert b._id == 2
+    assert a.id == 1
+    assert b.id == 2
+
+
+def test_orders_date(sys):
+    order = Order(1)
+    assert order.date.year == 2019
+    assert order.date.month == 4
+    assert order.date.day == 2
+    assert order.date.hour == 21
+    assert order.date.minute == 19
+    assert order.date.second == 11
+
 
 def test_orders_status(sys):
-	a = Order(1)
-	b = Order(2)
-	assert a._status == False
-	assert b._status == True
-	# assert a._date == 
+    a = Order(1)
+    b = Order(2)
+    assert a.status == False
+    assert b.status == True
+
 
 def test_orders_price(sys):
-	a = Order(1)
-	b = Order(2)
-	assert a._price == 16
-	assert b.price == 1
+    a = Order(1)
+    b = Order(2)
+    assert a.price == 16
+    assert b.price == 1
+
 
 def test_orders_items(sys):
-	a = Order(1)
-	b = Order(2)
+    order = Order(1)
+    assert len(order.items) == 2
 
-	assert len(a.items) == 2
-	assert len(b.items) == 1
+    MenuItem_1 = order.items[0]
+    assert MenuItem_1.price == 8
+    assert MenuItem_1.quantity == 1
+    assert MenuItem_1.is_custom == False
 
-
-	print([x.name for x in a.items])
-	MenuItem_a1 = a.items[0]
-
-	# print("AAAAA",MenuItem_a1.id)
-	assert MenuItem_a1.price == 8
-	assert MenuItem_a1.quantity == 1
-	assert MenuItem_a1.is_custom ==False
-
-	MenuItem_a2 = a.items[1]
-
-	assert MenuItem_a2.price == 8
-	assert MenuItem_a2.quantity == 1
-	assert MenuItem_a2.is_custom == True
+    MenuItem_2 = order.items[1]
+    assert MenuItem_2.price == 8
+    assert MenuItem_2.quantity == 1
+    assert MenuItem_2.is_custom == True
 
 
 def test_complete_order(sys):
-	a = Order(1)
-	assert a.status == False
+    a = Order(1)
+    assert a.status == False
 
-	a.completeOrder()
-	assert a.status == True
+    a.completeOrder()
+    assert a.status == True
+
 
 def test_no_order(sys):
-	with pytest.raises(NoItemError):
-		a = Order(3)
-
-
-
-
-
-# def test_orders_
+    with pytest.raises(NoItemError):
+        Order(3)

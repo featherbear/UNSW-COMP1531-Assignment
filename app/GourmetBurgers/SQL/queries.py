@@ -77,6 +77,7 @@ class INVENTORY:
     SET_INVENTORY = "UPDATE inventory SET quantity = ? WHERE inventoryID = ?"
 
     GET_STATUS = "SELECT is_available FROM inventory WHERE inventoryID = ?"
+    
     DISABLE_ITEM = "UPDATE inventory SET is_available = 0 WHERE inventoryID = ?"
     ENABLE_ITEM = "UPDATE inventory SET is_available = 1 WHERE inventoryID = ?"  
 
