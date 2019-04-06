@@ -139,7 +139,7 @@ class HistoricalMenuItem(MenuItemBase):
 
         if custom:
             # Add custom ingredients
-            for item in self._db.fetchAll(self._SQL.MENU.GET_CUSTOM_COMPONENTS, (customID,)):
+            for item in self._db.fetchAll(self._SQL.ORDERS.GET_CUSTOM_COMPONENTS, (customID,)):
                 inventoryID = item[0]
                 quantity = item[1]
                 self._components.append(
