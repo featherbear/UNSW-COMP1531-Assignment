@@ -256,6 +256,19 @@ def test_createOrder_client_error(sys):
             )
         ])
 
+    # Custom item usage exceeds allowable
+    with pytest.raises(IntegrityError):
+        sys.createOrder([
+            dict(
+                id=5,
+                qty=1,
+                custom=True,
+                items={
+                        5: 15
+                        }
+            )
+        ])
+
     # Custom item not in allowable custom list
     with pytest.raises(IntegrityError):
         sys.createOrder([
