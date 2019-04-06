@@ -77,14 +77,21 @@ class Test_US5:
         # Item two: ID 5, custom
         menuItem = list(sys.menu)[4]
         assert menuItem.available == True
-        _data2 = dict(id=menuItem.id, custom=True, items={5: 15})
+        _data2 = dict(id=menuItem.id, custom=True, items={5: 10})
 
         # Place the order
         order = sys.createOrder([_data1, _data2])
 
         assert order.id == 3
-        assert order.price == 116
+        assert order.price == 66
         assert order.status == False
+
+        # Check max item limit
+        with pytest.raises(Exception):
+            menuItem = list(sys.menu)[4]
+            assert menuItem.available == False
+            _data3 = dict(id=menuItem.id, custom=True, items={5: 15})
+            sys.createOrder([_data3])
 
 # User Story Six - Order Status
 class Test_US6:
@@ -105,7 +112,7 @@ class Test_US6:
         order = sys.getOrder(3)
 
         assert order.id == 3
-        assert order.price == 116
+        assert order.price == 66
         assert order.status == False
 
     def test_order_error(self, sys):

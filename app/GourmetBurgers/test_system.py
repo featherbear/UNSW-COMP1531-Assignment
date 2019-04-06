@@ -292,10 +292,10 @@ def test_client(sys):
     assert menuItem.available == True
 
     # Create the order
-    orderData = [dict(id=menuItem.id, custom=True, items={5: 15})]
+    orderData = [dict(id=menuItem.id, custom=True, items={5: 10})]
     order = sys.createOrder(orderData)
     assert order.id == 4
-    assert order.price == 5 + 10 * 5 # Base price + 10x ID 5
+    assert order.price == 5 + 5 * 5 # Base price + 5x ID 5
     assert order.status == False
     order.completeOrder()
     assert order.status == True

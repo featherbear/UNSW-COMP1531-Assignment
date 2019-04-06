@@ -140,7 +140,7 @@ class GBSystem:
                 raise models.OutOfStockError(menuID)
 
             defaultIngredients = _menuMap[menuID].getComponentUsage()
-            
+
             # Check validity for custom items
             if custom:
                 # Check if it is customisable
@@ -153,12 +153,24 @@ class GBSystem:
                     raise models.IntegrityError(
                         "No ingredients in custom order item")
 
+                # Check that the quantities of each ingredient do not exceed their maximum allowable quantity
+                """ Translate array into ID dict """
+                maxQuantities = {}
+                for ingredient in _menuMap[menuID].components:
+                    maxQuantities[ingredient.id] = ingredient.quantity_max
+
                 # Calculate menu delta
                 delta = {}
 
                 for id in ingredients.keys():
                     if id not in defaultIngredients:
-                        raise models.IntegrityError(f"Ingredient {id} is not part of menu item {menuID}")
+                        raise models.IntegrityError(
+                            f"Ingredient {id} is not part of menu item {menuID}")
+                    
+                    if ingredients[id] > maxQuantities[id]:
+                        raise models.IntegrityError(
+                            f"Ingredient limit exceeded {ingredients[id]} > {maxQuantities[id]} for ingredient {id} of menu {menuID}"
+                        )
 
                 for id, qty in defaultIngredients.items():
                     delta[id] = ingredients.get(id, 0) - qty
@@ -181,7 +193,7 @@ class GBSystem:
                 # Check there is enough stock for all orders
                 ingredientID = int(ingredientID)
                 _inventoryLevels[ingredientID] -= ingredients[ingredientID] * quantity
-                
+
                 if _inventoryLevels[int(ingredientID)] < 0:
                     raise models.OutOfStockError(
                         f"Not enough stock for ingredient {ingredientID}")
