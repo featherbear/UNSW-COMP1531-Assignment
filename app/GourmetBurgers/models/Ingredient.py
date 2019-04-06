@@ -72,7 +72,7 @@ class Ingredient(IngredientBase):
         super().__init__(inventoryID)
 
         query = self._db.fetchOne(
-            self._SQL.INVENTORY.GET_STATUS, (inventoryID,))
+            self._SQL.INVENTORY.GET_AVAILABLE, (inventoryID,))
         self._is_available = bool(query[0])
 
     @property
