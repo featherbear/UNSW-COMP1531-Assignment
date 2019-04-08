@@ -7,7 +7,7 @@ site = Blueprint(__name__, __name__)
 @site.route('/customer_order_status')
 def customer_order_status(orderID):
     order = GBSystem().getOrder(orderID)
-    datetime = order.datetime
+    date = order.date
     status = order.status
     price = order.price
-    return render_template("customer_order_status.html",orderID = orderID, datetime = datetime, status = status, price = price)
+    return render_template("customer_order_status.html",orderID = orderID, date = date, status = status, price = price)
