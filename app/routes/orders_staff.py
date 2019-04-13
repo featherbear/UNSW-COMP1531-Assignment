@@ -11,7 +11,7 @@ def view_staffOrder():
 
 @site.route('/staff/orders/update', methods=['POST'])
 def update_order():
-    return "UPDATED: " + str(request.form['orderID'])
+    return "Order NO." + str(request.form['orderID']) + " Status Updated!"
 
     order = app.GB.getOrder(orderID)
     order.completeOrder()

@@ -23,9 +23,13 @@
                         <td align="center">{{order.id}}</td>
                         <td>{% for menuItem in order.items %}
                             {{menuItem.name}}
+                        </br>
+                            {% for item in menuItem.components %}
+                            {{item.quantity}} * {{item.name}}
+                            <br>
+                            {% endfor %}
 
-                    {% endfor %}</td>
-
+                        {% endfor %}</td>
                         <td align="center">
                             <form method="POST" action="/staff/orders/update">
                                 <input type="hidden" name="orderID" value="{{order.id}}">
