@@ -8,7 +8,10 @@ site = Blueprint(__name__, __name__)
 def customer_order_status(orderID):
     order = models.Order(orderID)
     date = order.date
-    status = order.status
+    if order.status == 1:
+        status = "Completed"
+    else:
+        status = "Preparing"
     price = order.price
     items = order.items
     return render_template("customer_order_status.html",orderID = orderID, date = date, status = status, price = price, items = items)

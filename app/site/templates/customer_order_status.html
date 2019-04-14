@@ -1,4 +1,4 @@
-{% extends "orders_customer.html" %} {% set title = "Order Status" %} {% block head %}
+{% extends "_site.html" %} {% set title = "Order Status" %} {% block head %}
 <!-- this is in the head -->
 {% endblock %} {% block content %}
 <!-- this in the content -->
@@ -15,7 +15,6 @@
       {% for item in items %}
             <li>{{item.name}} x{{item.quantity}} ${{item.price}}</li>
          {% endfor %}
-      
       </Form>
    </body>
 </html>
