@@ -1,23 +1,20 @@
 from lib import util
-from flask import Blueprint, render_template, request, g, current_app as app
+from flask import Blueprint, render_template, request, redirect, g, current_app as app
 
 site = Blueprint(__name__, __name__)
 
 
 @site.route('/staff/orders/')
 def view_staffOrder():
-    return render_template('orders_staff.html', orders = list(list(app.GB.getOrders()))*2)
+    return render_template('orders_staff.html', orders = sorted(app.GB.getOrders()))
 
 
 @site.route('/staff/orders/update', methods=['POST'])
 def update_order():
-    return "UPDATED: " + str(request.form['orderID'])
-
-
-    order = app.GB.getOrder(orderID)
+    order = app.GB.getOrder(request.form['orderID'])
     order.completeOrder()
 
-    pass
+    return redirect("/staff/orders/")
 
 # @site.route('/staff/orders.json')
 # def get_customerOrder():
