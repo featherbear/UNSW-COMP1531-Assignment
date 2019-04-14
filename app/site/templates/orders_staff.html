@@ -2,39 +2,45 @@
 
 {% set title = "Orders Overview" %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/assets/css/orders_staff.css"/>
+{% endblock %}
+
 {% block content %}
-<table width="100%" align="center">
-<thead>
-    <tr>
-    <th>Orders ID</th>
-    <th>Order Details</th>
-    <th></th>
-    </tr>
-</thead>
-<tbody>
-    {% for order in orders %}
-    <tr>
-    <td align="center">{{ order.id }}</td>
-    <td>
-        {% for menuItem in order.items %}
-        <div>{{ menuItem.name }}
-        <br />
-        {% for item in menuItem.components %}
-        <i>{{ item.quantity }}{{item.suffix}} {{ item.name }}</i>
-        <br />
-        {% endfor %} {% endfor %}
-    </td>
-    <td align="center">
-        <form method="POST" action="/staff/orders/update">
-        <input type="hidden" name="orderID" value="{{ order.id }}" />
-        <button type="submit">Complete Order!</button>
-        </form>
-    </td>
-    </tr>
-    {% endfor %}
-    <tr>
-    <td align="center" colspan="3">No orders to prepare! Go slack off now :)</td>
-    </tr>
-</tbody>
-</table>
+<div id="dashboardContainer">
+  <table width="100%" align="center">
+    <thead>
+      <tr>
+        <th>Orders ID</th>
+        <th>Order Details</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td align="center">{{ order.id }}</td>
+        <td>
+          {% for menuItem in order.items %}
+          <div>{{ menuItem.name }}
+          <br />
+          {% for item in menuItem.components %}
+          <i>{{ item.quantity }}{{item.suffix}} {{ item.name }}</i>
+          <br />
+          {% endfor %} {% endfor %}
+        </td>
+        <td align="center">
+          <form method="POST" action="/staff/orders/update">
+            <input type="hidden" name="orderID" value="{{ order.id }}" />
+            <button type="submit">Complete Order!</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td align="center" colspan="3">No orders to prepare! Go slack off now :)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 {% endblock %}
