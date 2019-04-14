@@ -1,61 +1,40 @@
-{% extends "_site.html" %} {% set title = "Orders Overview" %} {% block head %}
-<!-- <head>Orders Staff</head> -->
-<!-- this is in the head -->
-{% endblock %} {% block content %}
-<!-- this in the content -->
-</br>
+{% extends "_site.html" %} 
 
-<body>
-    {{ orders }}
-    <table width="100%" align="center">
-        <tr>
-            <td>
-                <table width="100%" border="1" style="width: 800px; height: 80px" align="center">
-                    <tr>
-                        <th>Orders ID</th>
-                        <th>Order Details</th>
-                        <th>Change Status</th>
-                    </tr>
+{% set title = "Orders Overview" %}
 
-                    {% for order in orders %}
-                    
-                    <tr>
-                        <td align="center">{{order.id}}</td>
-                        <td>{% for menuItem in order.items %}
-                            {{menuItem.name}}
-                        </br>
-                            {% for item in menuItem.components %}
-                            {{item.quantity}} * {{item.name}}
-                            <br>
-                            {% endfor %}
-
-                        {% endfor %}</td>
-                        <td align="center">
-                            <form method="POST" action="/staff/orders/update">
-                                <input type="hidden" name="orderID" value="{{order.id}}">
-                                <button type="submit">Cooked!</button>
-                            </form>
-<!--
-------
-
-MenuItemOne
-* 5 tomatos
-* 3 buns
-MenuItemTwo
-* 3
-
-------
-
--->
-                            <!-- <p id="status"></p> -->
-                        </td>
-
-                    </tr>
-                    {% endfor %}
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-
+{% block content %}
+<table width="100%" align="center">
+<thead>
+    <tr>
+    <th>Orders ID</th>
+    <th>Order Details</th>
+    <th></th>
+    </tr>
+</thead>
+<tbody>
+    {% for order in orders %}
+    <tr>
+    <td align="center">{{ order.id }}</td>
+    <td>
+        {% for menuItem in order.items %}
+        <div>{{ menuItem.name }}
+        <br />
+        {% for item in menuItem.components %}
+        <i>{{ item.quantity }}{{item.suffix}} {{ item.name }}</i>
+        <br />
+        {% endfor %} {% endfor %}
+    </td>
+    <td align="center">
+        <form method="POST" action="/staff/orders/update">
+        <input type="hidden" name="orderID" value="{{ order.id }}" />
+        <button type="submit">Complete Order!</button>
+        </form>
+    </td>
+    </tr>
+    {% endfor %}
+    <tr>
+    <td align="center" colspan="3">No orders to prepare! Go slack off now :)</td>
+    </tr>
+</tbody>
+</table>
 {% endblock %}
