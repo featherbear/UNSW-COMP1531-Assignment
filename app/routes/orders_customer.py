@@ -13,7 +13,7 @@ def view_customerOrder():
 @site.route('/order/json', methods=["POST"])
 def get_customerOrder():
     orderID = request.json.get("orderID")
-
+    
     try:
         order = models.Order(orderID)
         return util.createJSON(True, dict(data=order.toDict()))
@@ -23,18 +23,5 @@ def get_customerOrder():
 
 @site.route('/order/new', methods=["POST"])
 def placeOrder():
-    app.GB.createOrder(request.data)
-    return render_template("orders_customer_completed.html")
-
-
-
-     
-    # import string
-    # import random
-    # orderID = ''.join(random.choice(
-    #     string.ascii_uppercase + string.digits) for _ in range(10))
-    # print(f"New order created: {orderID}")
-
-    # print(request.get_json())
-
-    # return util.createJSON(True, orderID=3)
+    orderID = app.GB.createOrder(request.data)
+    return render_template("orders_customer_completed.html", orderID = orderID)
