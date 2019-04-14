@@ -1,81 +1,34 @@
-{% extends "_site.html" %} {% set title = "Check your order" %} {% block head %}
-<!-- this is in the head -->
-{% endblock %} {% block content %}
-<!-- this in the content -->
-<style>
-  .triangle {
-    margin: 0 auto;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 50px 50px 0 50px;
-    border-color: #548fff transparent transparent transparent;
-  }
+{% extends "_site.html" %}
 
-  section[name="form"] {
-    background-color: #548fff;
-    text-align: center;
-  }
-  section[name="form"] form input[type="text"] {
-    border: 0;
-    border-bottom: 1px solid #3498db;
-    outline: none;
-    /* width: 100%; */
-    text-align: center;
-    /* font-size: 26px; */
-    background-color: transparent;
-  }
-  section[name="status"] {
-    background-color: #a5d0ff;
-  }
-</style>
+{% set title = "Order Status" %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/assets/css/orders_customer.css" />
+{% endblock %}
+
+{% block content %}
 <section name="form">
   <form>
-    <label>My order number is: #</label
-    ><input name="orderID" type="text" placeholder="Enter your order id..." />
-    <input type="submit" value="Check" />
+    <label>My order number is #</label>
+    <input name="orderID" type="text" placeholder="Enter your order id..." autofocus />
+    <button type="submit">Check</button>
   </form>
 </section>
 
 <section name="status">
   <div class="triangle"></div>
-  <!-- 
-  Order: #<span name="orderID"></span>
-  Price: $<span name="total"></span>
-  Order Time: <span name="time"></span> 
-  
-  Your Order
-  [                  ]
-  [                  ]
-  [                  ]
-           Total: $<span name="total"></span>
-  -->
+  <div id="error"></div>
+  <div id="statusContainer">
+    <div><b>Order</b> #<span name="orderID"></span></div>
+    <div><b>Price:</b> $<span name="total"></span></div>
+    <div><b>Order Time</b>: <span name="time"></span></div>
+    <div><b>Order Status</b>: <span name="status"></span></div>
+    <div>
+      <div><b>Your Order</b></div>
+      <div name="items"></div>
+    </div>
+    <div><b>Total</b>: $<span name="total"></span></div>
+  </div>
 </section>
-
-<script>
-  const checkOrder = function(orderID) {
-    GourmetBurgers.getOrder(orderID).then(orderData => {
-      document.querySelector("span[name=orderID]").innerText = orderData.id;
-    });
-  };
-
-  document.querySelector("form").addEventListener("submit", evt => {
-    evt.preventDefault();
-    let orderID = evt.target.orderID.value.trim();
-    
-    location.hash = "";
-    location.hash = orderID;
-    // checkOrder performed by `hashchange` event
-    // checkOrder(orderID);
-  });
-
-  window.addEventListener("hashchange", evt => {
-    let orderID = evt.newURL.split("#", 2)[1].trim();
-    if (!orderID) return;
-
-    document.querySelector("form").orderID.value = orderID;
-    checkOrder(orderID);
-  });
-</script>
+<script type="text/javascript" src="/assets/js/orders_customer.js"></script>
 {% endblock %}
