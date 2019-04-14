@@ -1,14 +1,22 @@
+{% extends "orders_customer.html" %} {% set title = "Order Status" %} {% block head %}
+<!-- this is in the head -->
+{% endblock %} {% block content %}
+<!-- this in the content -->
 <!doctype html>
 <html>
    <head>
-   <title>Customer Order Status </title>
+   <title>Check your order</title>
    </head>
    <body>
-      <h1> Order Status {{orderID}} </h1>
-      <p> date: {{date}} </p>
-      <p> status: {{status}} </p> 
-      <p> price: {{price}} </p>
-         
+      <p> Order ID: #{{orderID}} </p>
+      <p> Date: {{date}} </p>
+      <p> Status: {{status}} </p> 
+      <p> Price: ${{price}} </p>
+      {% for item in items %}
+            <li>{{item.name}} x{{item.quantity}} ${{item.price}}</li>
+         {% endfor %}
+      
       </Form>
    </body>
 </html>
+{% endblock %}
