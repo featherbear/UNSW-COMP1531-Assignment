@@ -10,6 +10,10 @@ def view_customerOrder():
     return render_template('orders_customer.html')
 
 
+@site.route('/cart/')
+def view_cart():
+    return render_template('checkout.html')
+
 @site.route('/order/json', methods=["POST"])
 def get_customerOrder():
     orderID = request.json.get("orderID")
