@@ -1,0 +1,44 @@
+{% extends "_site.html" %}
+
+{% set title = "Inventory" %}
+
+{% block head %}
+<!-- this is in the head -->
+{% endblock %}{% block content %}
+<!-- this in the content -->
+<table>
+	<thead><tr>
+		<th>Name</th>
+		<th>Current Stock</th>
+		<th>Maximum Stock</th>
+		<th>Update Stock</th>
+	</tr></thead>
+
+	<tbody>
+		{% for ingredient in inventory %}
+		<tr>
+			<td align="center">
+				{{ingredient.name}}
+			</td>
+			<td align="center">
+				{{ingredient.quantity}}{{ingredient.suffix}}
+			</td>
+			<td align="center">
+				{{ingredient.stock_max}}
+			</td>
+			<td align="center">
+
+			</td>
+		</tr>
+
+	</tbody>
+
+</table>
+
+
+
+
+
+
+
+{% endblock %}
