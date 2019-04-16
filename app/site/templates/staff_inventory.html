@@ -15,21 +15,31 @@
 	</tr></thead>
 
 	<tbody>
-		{% for ingredient in inventory %}
+		{% for ingredient in inventory.items %}
 		<tr>
 			<td align="center">
 				{{ingredient.name}}
 			</td>
-			<td align="center">
-				{{ingredient.quantity}}{{ingredient.suffix}}
-			</td>
-			<td align="center">
-				{{ingredient.stock_max}}
-			</td>
-			<td align="center">
 
+			<td align="center">
+				{{ingredient.quantity}} {{ingredient.suffix}}
+			</td>
+			
+			<td align="center">
+				{{ingredient.stock_max}} {{ingredient.suffix}}
+			</td>
+			
+			<td align="center">
+  <form method="POST" action="/staff/orders/update">
+<!--             <input type="hidden" name="orderID" value="{{ order.id }}" />
+ -->
+    	<input name="new_stock" type="integer">
+    	<button type="submit">Update</button>
+    	<input name= "id" type ="hidden" value = "ingredient.id">
+  </form>
 			</td>
 		</tr>
+		{% endfor %}
 
 	</tbody>
 
