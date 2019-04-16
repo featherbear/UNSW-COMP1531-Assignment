@@ -4,8 +4,69 @@
 
 {% block head %}
 <!-- this is in the head -->
-{% endblock %}
-
-{% block content %}
+{% endblock %}{% block content %}
 <!-- this in the content -->
+
+</br>
+
+<h1 align="center">Order Summary</h1>
+<p>Below is the details of your order:</p>
+
+Total: <span id="totalPrice"></span>
+<div id="orderItems">
+	
+</div>
+
+
+</br>
+
+<td align="center">
+	<button id="submit" type="submit">Place Order</button>
+
+<!-- 	<form method="POST" action="/order/new">
+		<input type="hidden" name="orderID" value="order.id">
+		<button type="submit">Place Order & Pay </button>
+	</form> -->
+</td>
+<script>
+// a = document.createElement('span') --> <span></span>
+// a --> <span></span>
+// a.innerText = "ABC" --> <span>ABC</span>
+
+function ready() {
+	for (item of GourmetBurgers.cart._data) {
+		container = document.createElement('div');
+
+		nameElement = document.createElement('span');
+		nameElement.innerText = item.qty + "x " + GourmetBurgers._menu[item["id"]]["name"];
+		container.appendChild(nameElement)
+
+		if (item.custom) {
+			ingredientElem = document.createElement('span');
+
+		// for (i = 0; i < GourmetBurgers._menu[item["id"]]["components"].length; i++) {
+			for (i in GourmetBurgers._menu[item["id"]]["components"]) {
+				quantity = GourmetBurgers._menu[item["id"]]["components"]["quantity"];
+				name = GourmetBurgers._inventory[i].name;
+				suffix = GourmetBurgers._inventory[i].suffix;
+
+				ingredientElem.innerText += `${quantity}${suffix} ${name}\n`;
+			}
+			container.appendChild(ingredientElem);
+		}
+
+		document.getElementById("orderItems").appendChild(container);
+	}
+
+	document.getElementById('totalPrice').innerText = GourmetBurgers.cart.calculate()
+
+
+	document.getElementById('submit').addEventListener('click', function() {
+		GourmetBurgers.cart.submitOrder();
+	})
+}
+
+
+</script>
+
 {% endblock %}
