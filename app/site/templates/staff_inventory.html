@@ -1,0 +1,54 @@
+{% extends "_site.html" %}
+
+{% set title = "Inventory" %}
+
+{% block head %}
+<!-- this is in the head -->
+{% endblock %}{% block content %}
+<!-- this in the content -->
+<table>
+	<thead><tr>
+		<th>Name</th>
+		<th>Current Stock</th>
+		<th>Maximum Stock</th>
+		<th>Update Stock</th>
+	</tr></thead>
+
+	<tbody>
+		{% for ingredient in inventory.items %}
+		<tr>
+			<td align="center">
+				{{ingredient.name}}
+			</td>
+
+			<td align="center">
+				{{ingredient.quantity}} {{ingredient.suffix}}
+			</td>
+			
+			<td align="center">
+				{{ingredient.stock_max}} {{ingredient.suffix}}
+			</td>
+			
+			<td align="center">
+  <form method="POST" action="/staff/orders/update">
+<!--             <input type="hidden" name="orderID" value="{{ order.id }}" />
+ -->
+    	<input name="new_stock" type="integer">
+    	<button type="submit">Update</button>
+    	<input name= "id" type ="hidden" value = "ingredient.id">
+  </form>
+			</td>
+		</tr>
+		{% endfor %}
+
+	</tbody>
+
+</table>
+
+
+
+
+
+
+
+{% endblock %}
