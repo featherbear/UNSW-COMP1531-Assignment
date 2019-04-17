@@ -10,9 +10,9 @@ def view_inventory():
     return render_template('staff_inventory.html', inventory = inventory)
 
 
-@site.route('/staff/inventory/update',methods = ['POST'])
+@site.route('/staff/inventory/update', methods=['POST'])
 def update_inventory():
-	ingredient = app.GB.getIngredient(request.form['id']
+	ingredient = app.GB.getIngredient(request.form['id'])
 	ingredient.updateStock(request.form['new_stock'])
 
 	return redirect("/staff/inventory/")
