@@ -17,7 +17,7 @@ def view_cart():
 @site.route('/order/json', methods=["POST"])
 def get_customerOrder():
     orderID = request.json.get("orderID")
-    
+
     try:
         order = models.Order(orderID)
         return util.createJSON(True, dict(data=order.toDict()))
