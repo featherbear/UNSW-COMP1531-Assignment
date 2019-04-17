@@ -15,7 +15,7 @@
 	</tr></thead>
 
 	<tbody>
-		{% for ingredient in inventory.items %}
+		{% for key, ingredient in inventory.items %}
 		<tr>
 			<td align="center">
 				{{ingredient.name}}
@@ -31,8 +31,6 @@
 			
 			<td align="center">
   <form method="POST" action="/staff/orders/update">
-<!--             <input type="hidden" name="orderID" value="{{ order.id }}" />
- -->
     	<input name="new_stock" type="integer">
     	<button type="submit">Update</button>
     	<input name= "id" type ="hidden" value = "ingredient.id">
