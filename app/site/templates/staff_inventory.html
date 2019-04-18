@@ -6,10 +6,17 @@
 <!-- this is in the head -->
 {% endblock %}{% block content %}
 <!-- this in the content -->
+<style>
+thead {color:white;background-color:goldenrod;}
+tbody {color:black;background-color:lemonchiffon}
 
 
+table{
+  border: 1px solid goldenrod;
+}
+</style>
 
-<table>
+<table style="width:100%">
 	<thead><tr>
 		<th>Name</th>
 		<th>Current Stock</th>
@@ -18,7 +25,7 @@
 	</tr></thead>
 
 	<tbody>
-		{% for key, ingredient in inventory.items %}
+		{% for key, ingredient in inventory.items() %}
 		<tr>
 			<td align="center">
 				{{ingredient.name}}
@@ -29,14 +36,14 @@
 			</td>
 			
 			<td align="center">
-				{{ingredient.stock_max}} {{ingredient.suffix}}
+				{{ingredient.quantity_max}} {{ingredient.suffix}}
 			</td>
 			
 			<td align="center">
-  <form method="POST" action="/staff/orders/update">
-    	<input name="new_stock" type="integer">
+  <form method="POST" action="/staff/inventory/update">
+    	<input name="new_stock" type="number">
+    	<input name= "id" type ="hidden" value = "{{ingredient.id}}">
     	<button type="submit">Update</button>
-    	<input name= "id" type ="hidden" value = "ingredient.id">
   </form>
 			</td>
 		</tr>
@@ -45,11 +52,5 @@
 	</tbody>
 
 </table>
-
-
-
-
-
-
 
 {% endblock %}
