@@ -41,7 +41,7 @@ table{
 			
 			<td align="center">
   <form method="POST" action="/staff/inventory/update">
-    	<input name="new_stock" type="number">
+    	<input name="new_stock" type="number" min = '0' max = '{{ingredient.quantity_max}}'>
     	<input name= "id" type ="hidden" value = "{{ingredient.id}}">
     	<button type="submit">Update</button>
   </form>
