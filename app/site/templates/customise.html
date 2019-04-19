@@ -8,6 +8,7 @@
 <style>
 .right{float:right} 
 </style>
+
 <div>
     {% if not can_customise %}
     <h2>Warning</h2>
@@ -20,9 +21,19 @@
     {% for component in components %}
         <l>{{component.name}}</l>
         <div class = right>
-            <button name = decrease, type = submit> - </button>
+            {% if component.quantity != 0 %}
+            <button name = decrease{{component.id}}, type = submit> - </button>
+            {% endif %}
+            {% if component.quantity == 0 %}
+            <button name = decrease{{component.id}}, disabled = "disabled"> - </button>
+            {% endif %}
             <input name="field_name" value={{component.quantity}} readonly = True/>
-            <button name = increase, type = submit> + </button>
+            {% if component.quantity != component.quantity_max %}
+            <button name = increase{{component.id}}, type = submit> + </button>
+            {% endif %}
+            {% if component.quantity == component.quantity_max %}
+            <button name = increase{{component.id}}, disabled = "disabled"> + </button>
+            {% endif %}
         </div>
         <br>
         <br>
