@@ -1,0 +1,28 @@
+{% extends "_site.html" %}
+{% set title = "Item Customise" %}
+{% block head %}
+<!-- this is in the head -->
+{% endblock %}{% block content %}
+<!-- this in the content -->
+
+<style>
+.right{float:right} 
+</style>
+
+
+<div>
+    {% if can_customise %}
+    {% for component in components %}
+        <l>{{component.name}}</l>
+        <div class = right>
+            <button name = decrease, type = submit> - </button>
+            <input name="field_name" value={{component.quantity}} readonly = True/>
+            <button name = increase, type = submit> + </button>
+        </div>
+        <br>
+        <br>
+    {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}
