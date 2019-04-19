@@ -19,9 +19,9 @@ table{
 <table style="width:100%">
 	<thead><tr>
 		<th>Name</th>
-		<th>Current Stock</th>
-		<th>Maximum Stock</th>
+		<th>Stock Status</th>
 		<th>Update Stock</th>
+		<th>Eable/Disable</th>
 	</tr></thead>
 
 	<tbody>
@@ -32,11 +32,7 @@ table{
 			</td>
 
 			<td align="center">
-				{{ingredient.quantity}} {{ingredient.suffix}}
-			</td>
-			
-			<td align="center">
-				{{ingredient.quantity_max}} {{ingredient.suffix}}
+				{{ingredient.quantity}}/{{ingredient.quantity_max}} {{ingredient.suffix}}
 			</td>
 			
 			<td align="center">
@@ -45,6 +41,10 @@ table{
     	<input name= "id" type ="hidden" value = "{{ingredient.id}}">
     	<button type="submit">Update</button>
   </form>
+			</td>
+			<td align="center">
+				{{ingredient.available}} <input name="available" type="hidden" value="{{ingredient.id}}">
+				<button type="submit">Eable/Disable</button>
 			</td>
 		</tr>
 		{% endfor %}

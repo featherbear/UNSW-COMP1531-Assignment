@@ -21,7 +21,7 @@ Total: <span id="totalPrice"></span>
 </br>
 
 <td align="center">
-	<button id="submit" type="submit" action = "/order/new">Place Order</button>
+	<button id="submit" type="submit">Place Order</button>
 
 <!-- 	<form method="POST" action="/order/new">
 		<input type="hidden" name="orderID" value="order.id">
@@ -58,7 +58,7 @@ function ready() {
 		document.getElementById("orderItems").appendChild(container);
 	}
 
-	document.getElementById('totalPrice').innerText = GourmetBurgers.cart.calculate()
+	document.getElementById('totalPrice').innerText = parseFloat(GourmetBurgers.cart.calculate()/100).toFixes(2)
 
 
 	document.getElementById('submit').addEventListener('click', function() {
