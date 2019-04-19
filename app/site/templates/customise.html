@@ -8,7 +8,12 @@
 <style>
 .right{float:right} 
 </style>
-
+<div>
+    {% if not can_customise %}
+    <h2>Warning</h2>
+    <p>This item can't be customised.</p>
+    {% endif %}
+</div>
 
 <div>
     {% if can_customise %}
