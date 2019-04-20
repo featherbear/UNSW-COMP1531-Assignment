@@ -17,6 +17,7 @@
 </div>
 
 <div>
+<form method="POST">
     {% if can_customise %}
     {% for component in components %}
         <l>{{component.name}}</l>
@@ -27,7 +28,12 @@
             {% if component.quantity == 0 %}
             <button name = decrease{{component.id}} disabled = "disabled"> - </button>
             {% endif %}
-            <input name="field_name" value={{component.quantity}} readonly = True/>
+            {% if not quantities %}
+            <input name = "quantity{{component.id}}" value = {{component.quantity}} readonly = True/>
+            {% endif %}
+            {% if quantities %}
+            <input name = "quantity{{component.id}}" value = {{quantities[component.id]}} readonly = True/>
+            {% endif %}
             {% if component.quantity != component.quantity_max %}
             <button name = increase{{component.id}} type = submit> + </button>
             {% endif %}
@@ -42,6 +48,7 @@
         <button name = addToCart type = submit>Add to cart</button>
     </div>
     {% endif %}
+</form>
 </div>
 
 
