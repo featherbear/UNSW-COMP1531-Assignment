@@ -19,15 +19,15 @@ def customise(menuID):
       print("hello")
       quantities = {}
       for item in components:
-         quantities[item.id] = request.form[f'quantity{item.id}']
+         quantities[item.id] = int(request.form[f'quantity{item.id}'])
          decrease = f'decrease{item.id}'
          increase = f'increase{item.id}'
          if decrease in request.form:
             #update quantity
-            quantities[item.id] = str(int(quantities[item.id]) - 1)
+            quantities[item.id] -= 1
          elif increase in request.form:
             #update quantity
-            quantities[item.id] = str(int(quantities[item.id]) + 1)
+            quantities[item.id] += 1
       
       return render_template('customise.html', can_customise = menuItem.can_customise, components = components, quantities = quantities)
 
