@@ -58,7 +58,7 @@ function ready() {
 		document.getElementById("orderItems").appendChild(container);
 	}
 
-	document.getElementById('totalPrice').innerText = GourmetBurgers.cart.calculate()
+	document.getElementById('totalPrice').innerText = parseFloat(GourmetBurgers.cart.calculate()/100).toFixes(2)
 
 
 	document.getElementById('submit').addEventListener('click', function() {
