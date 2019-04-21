@@ -38,3 +38,22 @@
   font-style: italic;
   display: table-row;
 }
+
+.orderViewToggle {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.orderViewToggle a, .orderViewToggle a:visited {
+  background-color: rgba(0,0,0,0.2);
+  color: white;
+  text-decoration: none;
+  border: 1px solid white;
+  padding: 3px 5px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.orderViewToggle a:hover {
+  background-color: white;
+  color: black;
+}
