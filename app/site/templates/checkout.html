@@ -2,53 +2,50 @@
 
 {% set title = "Your Order" %}
 
-{% block head %}
-<!-- this is in the head -->
-{% endblock %}{% block content %}
-<!-- this in the content -->
+{% block content %}
+<style>
+h1, p, div {
+	color: white;
+}
+</style>
+<h1>Order Summary</h1>
+<p>Below are the details of your order:</p>
 
-</br>
+<h3>Total: $<span id="totalPrice"></span></h3>
 
-<h1 align="center">Order Summary</h1>
-<p>Below is the details of your order:</p>
-
-Total: <span id="totalPrice"></span>
 <div id="orderItems">
 	
 </div>
-
 
 </br>
 
 <td align="center">
 	<button id="submit" type="submit">Place Order</button>
-
-<!-- 	<form method="POST" action="/order/new">
-		<input type="hidden" name="orderID" value="order.id">
-		<button type="submit">Place Order & Pay </button>
-	</form> -->
 </td>
-<script>
-// a = document.createElement('span') --> <span></span>
-// a --> <span></span>
-// a.innerText = "ABC" --> <span>ABC</span>
 
+<script>
 function ready() {
+	const intToDecimal = price => parseFloat(price/100).toFixed(2);
+
+	let total = 0;
 	for (item of GourmetBurgers.cart._data) {
 		container = document.createElement('div');
 
+		let price = GourmetBurgers.cart._calculate(item);
+		total += price * item.qty;
+
 		nameElement = document.createElement('span');
-		nameElement.innerText = item.qty + "x " + GourmetBurgers._menu[item["id"]]["name"];
+		nameElement.innerText = `${item.qty}x ${GourmetBurgers._menu[item.id].name} ($${intToDecimal(price)})`;
+		
 		container.appendChild(nameElement)
 
 		if (item.custom) {
 			ingredientElem = document.createElement('span');
 
-		// for (i = 0; i < GourmetBurgers._menu[item["id"]]["components"].length; i++) {
-			for (i in GourmetBurgers._menu[item["id"]]["components"]) {
-				quantity = GourmetBurgers._menu[item["id"]]["components"]["quantity"];
-				name = GourmetBurgers._inventory[i].name;
-				suffix = GourmetBurgers._inventory[i].suffix;
+			for (let ingredientID in GourmetBurgers._menu[item.id].components) {
+				quantity = GourmetBurgers._menu[item.id].components.quantity;
+				name = GourmetBurgers._inventory[ingredientID].name;
+				suffix = GourmetBurgers._inventory[ingredientID].suffix;
 
 				ingredientElem.innerText += `${quantity}${suffix} ${name}\n`;
 			}
@@ -58,15 +55,12 @@ function ready() {
 		document.getElementById("orderItems").appendChild(container);
 	}
 
-	document.getElementById('totalPrice').innerText = GourmetBurgers.cart.calculate()
+	document.getElementById('totalPrice').innerText = intToDecimal(total);
 
-
-	document.getElementById('submit').addEventListener('click', function() {
-		GourmetBurgers.cart.submitOrder();
+	document.getElementById('submit').addEventListener('click', async function() {
+		let json = await GourmetBurgers.cart.submitOrder();
+		if (json.url) location.href = json.url;
 	})
 }
-
-
 </script>
-
 {% endblock %}
