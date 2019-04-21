@@ -71,6 +71,7 @@ class GBSystem:
 
     """ Orders """
     # Get all past orders
+
     def getOrders(self, fetchAll=False):
         if fetchAll:
             query = self._db.fetchAll(SQL.ORDERS.GET_ALL_ORDERS)
@@ -109,7 +110,7 @@ class GBSystem:
         _inventoryMap = self.getInventoryMap()
         _menuMap = self.getMenuMap()
 
-        price = 0
+        prices = []
 
         """
         VALIDATION
@@ -123,6 +124,7 @@ class GBSystem:
         # Validate each food item
         for foodItem in orderData:
             menuID = int(foodItem["id"])
+
             quantity = int(foodItem.get("qty", 1))
             custom = bool(foodItem.get("custom", 0))
 
@@ -140,6 +142,8 @@ class GBSystem:
                 raise models.OutOfStockError(menuID)
 
             defaultIngredients = _menuMap[menuID].getComponentUsage()
+
+            price = _menuMap[menuID].price
 
             # Check validity for custom items
             if custom:
@@ -166,7 +170,7 @@ class GBSystem:
                     if id not in defaultIngredients:
                         raise models.IntegrityError(
                             f"Ingredient {id} is not part of menu item {menuID}")
-                    
+
                     if ingredients[id] > maxQuantities[id]:
                         raise models.IntegrityError(
                             f"Ingredient limit exceeded {ingredients[id]} > {maxQuantities[id]} for ingredient {id} of menu {menuID}"
@@ -182,8 +186,6 @@ class GBSystem:
             else:
                 ingredients = defaultIngredients
 
-            price += _menuMap[menuID].price
-
             # Check that each ingredient exists, and has enough stock
             for ingredientID in ingredients:
                 # Check if it exists
@@ -197,6 +199,8 @@ class GBSystem:
                 if _inventoryLevels[int(ingredientID)] < 0:
                     raise models.OutOfStockError(
                         f"Not enough stock for ingredient {ingredientID}")
+
+            prices.append(price)
 
         """
         TRANSACTION
@@ -217,8 +221,9 @@ class GBSystem:
 
             # Decrease inventory stock
             for ingredientID, qty in ingredients.items():
-                _inventoryMap[int(ingredientID)
-                              ].updateStock(-1 * quantity * qty)
+                if qty > 0:
+                    _inventoryMap[int(ingredientID)
+                                  ].updateStock(-1 * quantity * qty)
 
             # Create custom order data
             if custom:
@@ -228,10 +233,12 @@ class GBSystem:
                     self._db.insert(SQL.ORDERS.CREATE_LINK_CUSTOM_MAINS,
                                     (customID, ingredientID, ingredients[ingredientID]))
                 self._db.insert(SQL.ORDERS.CREATE_LINK_ORDER__CUSTOM,
-                                (orderID, customID, quantity, price))
+                                (orderID, customID, quantity, prices[0]))
             else:
                 self._db.insert(SQL.ORDERS.CREATE_LINK_ORDER,
-                                (orderID, menuID, quantity, price))
+                                (orderID, menuID, quantity, prices[0]))
+
+            del prices[0]
 
         return models.Order(orderID)
 

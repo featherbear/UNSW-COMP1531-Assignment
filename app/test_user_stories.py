@@ -83,7 +83,7 @@ class Test_US5:
         order = sys.createOrder([_data1, _data2])
 
         assert order.id == 3
-        assert order.price == 66
+        assert order.price == 33
         assert order.status == False
 
         # Check max item limit
@@ -112,7 +112,7 @@ class Test_US6:
         order = sys.getOrder(3)
 
         assert order.id == 3
-        assert order.price == 66
+        assert order.price == 33
         assert order.status == False
 
     def test_order_error(self, sys):
