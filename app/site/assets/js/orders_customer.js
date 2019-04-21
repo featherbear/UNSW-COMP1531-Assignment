@@ -78,3 +78,9 @@ window.addEventListener("hashchange", evt => {
   document.querySelector("form").orderID.value = orderID;
   checkOrder(orderID);
 });
+
+function ready() {
+  if (location.hash) {
+    checkOrder(location.hash.substr(1));
+  }
+}

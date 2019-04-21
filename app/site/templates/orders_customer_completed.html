@@ -3,15 +3,10 @@
 {% set title = "Order Completed" %}
 
 {% block content %}
-<body>
-	<h2>Order Completed</h2>
-	<br/>
-		<div><p>Thank you for your order!</p>
-			<div>
-				Click button below to track your order with orderID {{orderID}}
-			</div>
-		</div>
-		</br>
-		<a href="/status#{{orderID}}"><button style="height: 30px"> Track my order </button></a>
-	</body>
+<div style="color: white; text-align: center">
+	<h2>Order Placed</h2>
+	<div>Your order ID is #{{ orderID }}</div>
+	<a href="/status#{{orderID}}"><button style="height: 30px">Track my Order</button></a>
+	<div style="text-align: center; font-size: 150px;">&#10004;</div>
+</div>
 {% endblock %}
