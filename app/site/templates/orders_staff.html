@@ -22,12 +22,12 @@
         <td align="center">{{ order.id }}</td>
         <td>
           {% for menuItem in order.items %}
-          <div>{{ menuItem.name }}
+          <div><b>{{ menuItem.name }}</b>
           <br />
           {% for item in menuItem.components %}
-          <i>{{ item.quantity }}{{item.suffix}} {{ item.name }}</i>
+          {% if item.quantity %}<i>{{ item.quantity }}{{item.suffix}} {{ item.name }}</i>
           <br />
-          {% endfor %} {% endfor %}
+          {% endif %}{% endfor %} {% endfor %}
         </td>
         <td align="center">
           <form method="POST" action="/staff/orders/update">
