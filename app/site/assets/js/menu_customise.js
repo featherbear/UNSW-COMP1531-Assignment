@@ -25,6 +25,9 @@ let openCustomise;
 
     let ingredient = GourmetBurgers._inventory[component.id];
     elem.ingredientID = ingredient.id;
+    if (ingredient.quantity == 0) {
+      elem.classList.add("disabled");
+    }
 
     let name = document.createElement("td");
     name.innerText = `${ingredient.name} ($${priceToDecimal(
@@ -53,14 +56,15 @@ let openCustomise;
     };
 
     const updateAppearance = function() {
-      btnDecrement.disabled = selector.value == 0;
+      btnDecrement.disabled = ingredient.quantity == 0 || selector.value == 0;
       btnDecrement.classList.toggle("disabled", btnDecrement.disabled);
-      btnIncrement.disabled = selector.value == selector.max;
+      btnIncrement.disabled =
+        ingredient.quantity == 0 || selector.value == selector.max;
       btnIncrement.classList.toggle("disabled", btnIncrement.disabled);
     };
 
     let selector = document.createElement("input");
-    selector.value = component.quantity;
+    selector.value = ingredient.quantity == 0 ? 0 : component.quantity;
     selector.min = 0;
     selector.max = component.quantity_max;
     selector.readOnly = true;
@@ -88,14 +92,27 @@ let openCustomise;
     };
 
     for (let componentElem of tableBody.querySelectorAll("tbody tr")) {
-      data.items[componentElem.ingredientID] =  parseInt(componentElem.querySelector("input").value);
+      data.items[componentElem.ingredientID] = parseInt(
+        componentElem.querySelector("input").value
+      );
     }
 
     return data;
   };
 
-  const updateItemTotal = function() {
-    let priceString = priceToDecimal(GourmetBurgers.cart._calculate(getData()));
+  const updateItemDisplay = function() {
+    let data = getData();
+
+    let atLeastOneItem = false;
+    for (let qty of Object.values(data.items)) {
+      if (qty > 0) {
+        atLeastOneItem = true;
+        break;
+      }
+    }
+    modal.querySelector("button[name=submit]").disabled = !atLeastOneItem;
+
+    let priceString = priceToDecimal(GourmetBurgers.cart._calculate(data));
     for (let elem of document.querySelectorAll("[name=itemTotal]")) {
       elem.innerText = priceString;
     }
@@ -109,11 +126,11 @@ let openCustomise;
     tableBody.innerText = "";
     for (let component in item.components) {
       tableBody.appendChild(
-        createIngredientElem(item.components[component], updateItemTotal)
+        createIngredientElem(item.components[component], updateItemDisplay)
       );
     }
 
-    updateItemTotal();
+    updateItemDisplay();
 
     modal.querySelector("button[name=submit]").onclick = function() {
       try {

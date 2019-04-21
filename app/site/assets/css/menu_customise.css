@@ -51,6 +51,10 @@ body:not(.show-modal) #customiseContainer {
 #modal .content table tbody tr {
   height: 50px;
 }
+#modal .content table tbody tr.disabled {
+  color: grey;
+  font-style: italic;
+}
 #modal .content table tbody td {
   text-align: center;
 }
