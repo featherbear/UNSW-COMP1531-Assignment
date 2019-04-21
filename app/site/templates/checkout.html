@@ -59,9 +59,9 @@ function ready() {
 			ingredientContainer = document.createElement('div');
 			ingredientContainer.classList.add('ingredients');
 
-			for (let ingredientID in GourmetBurgers._menu[item.id].components) {
+			for (let ingredientID in item.items) {
 				ingredientElem = document.createElement('span');
-				quantity = GourmetBurgers._menu[item.id].components[ingredientID].quantity;
+				quantity = item.items[ingredientID];
 				if (quantity == 0) continue;
 				name = GourmetBurgers._inventory[ingredientID].name;
 				suffix = GourmetBurgers._inventory[ingredientID].suffix;
