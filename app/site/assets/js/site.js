@@ -20,9 +20,11 @@ if (sessionStorage.getItem("loaded") != "true") {
 // Display the order total
 function updateTotal() {
   if (GourmetBurgers.cart._data) {
-    document.querySelector('.cart [name=orderTotal]').innerText = (GourmetBurgers.cart.calculate()/100).toFixed(2);
+    document.querySelector('.cart [name=orderTotal]').innerText = priceToDecimal(GourmetBurgers.cart.calculate());
     document.querySelector('.cart').classList.add('active');
   } else {
     document.querySelector('.cart').classList.remove('active');
   }
 }
+
+const priceToDecimal = price => parseFloat(price/100).toFixed(2);
