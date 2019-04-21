@@ -42,7 +42,7 @@ function ready() {
 
     let price = document.createElement("span");
     price.classList.add("price");
-    price.innerText = item.price / 100;
+    price.innerText = priceToDecimal(item.price);
     header.appendChild(price);
 
     let desc = document.createElement("div");
@@ -60,7 +60,8 @@ function ready() {
         cust.classList.add("customise");
         cust.innerText = "Customise";
         cust.addEventListener("click", function() {
-          // TODO: Add customise
+          openCustomise(item);
+          // location.href=`/menu/customise/${menuID}`
         });
 
         footer.appendChild(cust);
@@ -101,7 +102,7 @@ function ready() {
   }
 
   // Return a filter function for Isotope
-  // Filter selects menuItems which have a certain categoryID in level 0 
+  // Filter selects menuItems which have a certain categoryID in level 0
   const getFilterFunction = categoryID => elem =>
     menu[elem.menuID].categories.hasOwnProperty(0) &&
     menu[elem.menuID].categories[0].indexOf(categoryID) > -1;
@@ -112,7 +113,7 @@ function ready() {
       // Toggle UI
       menuCategoriesMap[currentCategory].classList.remove("active");
       menuCategoriesMap[categoryID].classList.add("active");
-      
+
       // Filter menuItems via Isotope
       _iso_arrange({
         filter: categoryID ? getFilterFunction(categoryID) : ""
@@ -180,7 +181,7 @@ function ready() {
       priceAsc: true,
       priceDesc: false
     },
-    stagger: 40
+    stagger: 20
   });
 
   // Handle sorting
@@ -191,18 +192,20 @@ function ready() {
     });
 
   // Handle searching
+  document.querySelector(".search input").value = "";
   document.querySelector(".search input").addEventListener("input", function() {
     selectCategory(undefined, true);
     let needle = this.value.toLowerCase();
     _iso_arrange({
       filter: elem => menu[elem.menuID].name.toLowerCase().indexOf(needle) > -1
     });
-    
   });
 
   function _iso_arrange(data) {
     iso.arrange(data);
-    document.querySelector('.no-items').classList.toggle("active", iso.filteredItems.length == 0);
+    document
+      .querySelector(".no-items")
+      .classList.toggle("active", iso.filteredItems.length == 0);
   }
 
   updateTotal();

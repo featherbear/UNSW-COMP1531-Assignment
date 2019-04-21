@@ -6,7 +6,7 @@ site = Blueprint(__name__, __name__)
 
 @site.route('/staff/orders/')
 def view_staffOrder():
-    return render_template('orders_staff.html', orders = sorted(app.GB.getOrders()))
+    return render_template('orders_staff.html', orders = sorted(app.GB.getOrders(), key=lambda o: o.date))
 
 
 @site.route('/staff/orders/update', methods=['POST'])

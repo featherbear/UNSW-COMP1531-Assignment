@@ -19,7 +19,7 @@ const checkOrder = function(orderID) {
       ? "Ready for Pickup"
       : "Preparing";
     for (let elem of document.querySelectorAll("span[name=total]")) {
-      elem.innerText = parseFloat(orderData.price / 100).toFixed(2);
+      elem.innerText = priceToDecimal(orderData.price);
     }
 
     for (let item of orderData.items) {
@@ -41,21 +41,23 @@ const checkOrder = function(orderID) {
         let builder = [];
         for (let ingredientID in item.components) {
           if (!(ingredientID in GourmetBurgers._inventory)) continue;
+          let quantity = item.components[ingredientID];
+          if (quantity == 0) continue;
           let ingredient = GourmetBurgers._inventory[ingredientID];
           builder.push(
-            `${item.components[ingredientID]}${ingredient.suffix} ${
+            `${quantity}${ingredient.suffix} ${
               ingredient.name
             }`
           );
         }
-        dataElem_cust.innerText = builder.join("<br>");
+        dataElem_cust.innerHTML = builder.join("<br>");
         dataElem.appendChild(dataElem_cust);
       }
 
       elem.appendChild(dataElem);
 
       let priceElem = document.createElement("div");
-      priceElem.innerText = parseFloat(item.quantity * item.price / 100).toFixed(2);
+      priceElem.innerText = priceToDecimal(item.quantity * item.price);
       elem.appendChild(priceElem);
 
       itemsContainer.appendChild(elem);
@@ -81,6 +83,10 @@ window.addEventListener("hashchange", evt => {
 
 function ready() {
   if (location.hash) {
-    checkOrder(location.hash.substr(1));
+    let orderID = location.hash.substr(1);
+    document.querySelector("form").orderID.value = orderID;
+    checkOrder(orderID);
   }
+
+  updateTotal();
 }

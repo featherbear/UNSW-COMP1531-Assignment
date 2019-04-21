@@ -50,9 +50,11 @@ let GourmetBurgers;
       // Calculate the price of an individual order item
       // Does not account for quantity
       _calculate: item => {
+        let price = self._menu[item.id].price;
+
         // If the item is not a custom item, then return the base price
         if (!item.custom) {
-          return self._menu[item.id].price;
+          return price;
         }
 
         // Structure check
@@ -60,20 +62,19 @@ let GourmetBurgers;
 
         // For custom items, calculate the ingredient delta
         let delta = {};
-        let defaults = self._menu[item.id].components;
+        let defaults = Object.values(self._menu[item.id].components);
         for (let ingredient of defaults) {
           delta[ingredient.id] =
             (item.items[ingredient.id] || 0) - ingredient.quantity;
         }
 
-        let customPrice = 0;
         // For added ingredients, add the price of each ingredient
         for (let id in delta) {
           if (delta[id] > 0) {
-            customPrice += self._inventory[id].price * quantity;
+            price += self._inventory[id].price * delta[id];
           }
         }
-        return customPrice;
+        return price;
       },
 
       // Submit order
@@ -129,10 +130,17 @@ let GourmetBurgers;
         }
 
         // Add the component usage for the current item
-        components = data ? data : self._menu[id].components;
-        for (let component of Object.values(components)) {
-          componentUsage[component.id] =
-            (componentUsage[component.id] || 0) + component.quantity;
+        if (data) {
+          components = data;
+        } else {
+          components = {};
+          for (let component of Object.values(self._menu[id].components)) {
+            components[component.id] = component.quantity;
+          }
+        }
+
+        for (let componentID in components) {
+          componentUsage[componentID] = (componentUsage[componentID] || 0) + components[componentID];
         }
 
         // Check that there is enough stock for the component usage
