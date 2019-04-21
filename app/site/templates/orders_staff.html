@@ -30,10 +30,12 @@
           {% endif %}{% endfor %} {% endfor %}
         </td>
         <td align="center">
+          {% if order.status == False %}
           <form method="POST" action="/staff/orders/update">
             <input type="hidden" name="orderID" value="{{ order.id }}">
             <button type="submit">Complete Order!</button>
           </form>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
@@ -42,5 +44,11 @@
       </tr>
     </tbody>
   </table>
+</div>
+<div class="orderViewToggle">{% if all %}
+<a href=".">View only active orders</a>
+{% else %}
+<a href="?all">View all orders</a>
+{% endif %}
 </div>
 {% endblock %}
