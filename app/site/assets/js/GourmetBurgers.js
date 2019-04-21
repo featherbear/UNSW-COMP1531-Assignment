@@ -119,12 +119,19 @@ let GourmetBurgers;
 
         // Calculate component usage of current items
         for (let orderItem of self.cart._data) {
-          let components = orderItem.custom
-            ? orderItem.items
-            : self._menu[orderItem.id].components;
-          for (let component of Object.values(components)) {
-            componentUsage[component.id] =
-              ((componentUsage[component.id] || 0) + component.quantity) *
+          if (orderItem.custom) {
+            components = orderItem.items;
+          } else {
+            components = {};
+            for (let component of Object.values(
+              self._menu[orderItem.id].components
+            )) {
+              components[component.id] = component.quantity;
+            }
+          }
+          for (let componentID in components) {
+            componentUsage[componentID] =
+              ((componentUsage[componentID] || 0) + components[componentID]) *
               orderItem.qty;
           }
         }
@@ -140,7 +147,8 @@ let GourmetBurgers;
         }
 
         for (let componentID in components) {
-          componentUsage[componentID] = (componentUsage[componentID] || 0) + components[componentID];
+          componentUsage[componentID] =
+            (componentUsage[componentID] || 0) + components[componentID];
         }
 
         // Check that there is enough stock for the component usage
