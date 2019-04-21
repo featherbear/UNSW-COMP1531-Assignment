@@ -6,13 +6,22 @@ site = Blueprint(__name__, __name__)
 
 @site.route('/staff/inventory/')
 def view_inventory():
-	inventory = app.GB.getInventoryMap()
-    return render_template('staff_inventory.html', inventory = inventory)
+    return render_template('staff_inventory.html', inventory=app.GB.getInventoryMap())
 
 
-@site.route('/staff/inventory/update',methods = ['POST'])
+@site.route('/staff/inventory/update', methods=['POST'])
 def update_inventory():
-	ingredient = app.GB.getIngredient(request.form['id']
-	ingredient.updateStock(request.form['new_stock'])
+    try:
+        ingredientID = request.form['id']
+        ingredient = app.GB.getIngredient(ingredientID)
 
-	return redirect("/staff/inventory/")
+        if "update_stock" in request.form:
+            newLevel = int(request.form['new_stock'])
+            if 0 <= newLevel <= ingredient.quantity_max:
+                ingredient.updateStock(int(request.form['new_stock']))
+        elif "enable" in request.form and ingredient.quantity is not 0:
+            ingredient.available = True
+        elif "disable" in request.form:
+            ingredient.available = False
+    finally:
+        return redirect("/staff/inventory/")
