@@ -14,6 +14,7 @@ def view_customerOrder():
 def view_cart():
     return render_template('checkout.html')
 
+
 @site.route('/order/json', methods=["POST"])
 def get_customerOrder():
     orderID = request.json.get("orderID")
@@ -27,5 +28,10 @@ def get_customerOrder():
 
 @site.route('/order/new', methods=["POST"])
 def placeOrder():
-    orderID = app.GB.createOrder(request.json["order"])
-    return render_template("orders_customer_completed.html", orderID = orderID)
+    orderID = app.GB.createOrder(request.json["order"]).id
+    return util.createJSON(True, dict(orderID=orderID, url=f"/order/complete/{orderID}"))
+
+
+@site.route("/order/complete/<orderID>/")
+def orderComplete(orderID):
+    return render_template("orders_customer_completed.html", orderID=orderID)

@@ -41,34 +41,39 @@ let GourmetBurgers;
         let sum = 0;
 
         for (let item of self.cart._data) {
-          // If the item is not a custom item, then add the base price
-          if (!item.custom) {
-            sum += self._menu[item.id].price * item.qty;
-            continue;
-          }
-
-          // Structure check
-          if (typeof item.items !== "object") throw Error("Bad item.items");
-
-          // For custom items, calculate the ingredient delta
-          let delta = {};
-          let defaults = self._menu[item.id].components;
-          for (let ingredient of defaults) {
-            delta[ingredient.id] =
-              (item.items[ingredient.id] || 0) - ingredient.quantity;
-          }
-
-          let customPrice = 0;
-          // For added ingredients, add the price of each ingredient
-          for (let id in delta) {
-            if (delta[id] > 0) {
-              customPrice += self._inventory[id].price * quantity;
-            }
-          }
-          sum += customPrice * item.qty;
+          sum += self.cart._calculate(item) * item.qty;
         }
 
         return sum;
+      },
+
+      // Calculate the price of an individual order item
+      // Does not account for quantity
+      _calculate: item => {
+        // If the item is not a custom item, then return the base price
+        if (!item.custom) {
+          return self._menu[item.id].price;
+        }
+
+        // Structure check
+        if (typeof item.items !== "object") throw Error("Bad item.items");
+
+        // For custom items, calculate the ingredient delta
+        let delta = {};
+        let defaults = self._menu[item.id].components;
+        for (let ingredient of defaults) {
+          delta[ingredient.id] =
+            (item.items[ingredient.id] || 0) - ingredient.quantity;
+        }
+
+        let customPrice = 0;
+        // For added ingredients, add the price of each ingredient
+        for (let id in delta) {
+          if (delta[id] > 0) {
+            customPrice += self._inventory[id].price * quantity;
+          }
+        }
+        return customPrice;
       },
 
       // Submit order
@@ -80,7 +85,7 @@ let GourmetBurgers;
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            order: self.order._data
+            order: self.cart._data
           })
         })
           .then(resp => resp.json())
@@ -88,7 +93,7 @@ let GourmetBurgers;
             if (json.status) {
               self.cart._data = [];
               self.cart._updateOrder();
-              return json.orderID;
+              return json;
             } else {
               return false;
             }
@@ -138,7 +143,9 @@ let GourmetBurgers;
           if (
             self._inventory[componentID].quantity < componentUsage[componentID]
           ) {
-            throw Error("Your order uses too many ingredients which we don't have enough of :'(");
+            throw Error(
+              "Your order uses too many ingredients which we don't have enough of :'("
+            );
           }
         }
 
