@@ -19,7 +19,7 @@ const checkOrder = function(orderID) {
       ? "Ready for Pickup"
       : "Preparing";
     for (let elem of document.querySelectorAll("span[name=total]")) {
-      elem.innerText = parseFloat(orderData.price).toFixed(2);
+      elem.innerText = parseFloat(orderData.price / 100).toFixed(2);
     }
 
     for (let item of orderData.items) {
@@ -55,7 +55,7 @@ const checkOrder = function(orderID) {
       elem.appendChild(dataElem);
 
       let priceElem = document.createElement("div");
-      priceElem.innerText = parseFloat(item.quantity * item.price).toFixed(2);
+      priceElem.innerText = parseFloat(item.quantity * item.price / 100).toFixed(2);
       elem.appendChild(priceElem);
 
       itemsContainer.appendChild(elem);
