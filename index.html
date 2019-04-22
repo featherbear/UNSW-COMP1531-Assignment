@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>GourmetBurgers</title>
+	<link rel="icon" href="./assets/img/favicon.ico" type="image/x-icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<link rel="stylesheet" type="text/css" media="screen" href="./assets/css/site.css" />
+	<script src="./assets/js/site.js" defer></script>
+	<script src="./assets/js/GourmetBurgers.js" defer></script>
+
+</head>
+
+<body>
+	<div id="loading" class="no-select">
+		<img src="./assets/img/logo-loading.svg" />
+		<h1>Frying French Fries.<h1>
+	</div>
+
+	<header>
+		<div class="container no-select">
+			<a href="./cart">
+				<div class="cart">Your Order: $<span name="orderTotal"></span></div>
+			</a>
+			<div class="logo"><a href="."><img src="./assets/img/BURGAAAAA.svg" /></a></div>
+			<div class="menu">
+				<a href="./menu">Browse</a>
+				<a href="./status">Order Status</a>
+			</div>
+		</div>
+	</header>
+
+	<div id="content" class="container">
+		<style>
+			body>.container {
+				text-align: center;
+				color: white;
+
+				cursor: pointer;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+			}
+
+			body>.container>h1 {
+				mix-blend-mode: overlay;
+				font-size: 3em;
+			}
+
+			body>.container>span {
+				font-size: 1.5em;
+			}
+		</style>
+
+		<h1 style="margin-top: 10vh;">Welcome to Gourmet Burgers!</h1>
+		<span>Click a tab above to get started...</span>
+	</div>
+
+	<footer>
+		<div class="container">
+			<div class="greybox">
+				<span class="staff no-select"><a href="./staff/inventory">Staff Inventory</a> | <a href="./staff/orders">Staff Orders</a></span>
+				<ul>
+					<li>z5142003</li>
+					<li>z5206677</li>
+					<li>z5210581</li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+</body>
+
+</html>
